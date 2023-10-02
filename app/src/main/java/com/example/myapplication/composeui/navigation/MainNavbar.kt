@@ -86,7 +86,7 @@ fun Topbar(
                     modifier = Modifier
                         .size(30.dp)
                         .clickable { navController.navigateUp() },
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    tint = MaterialTheme.colorScheme.secondary
                 )
             } else
                 Icon(
@@ -95,7 +95,7 @@ fun Topbar(
                     modifier = Modifier
                         .size(30.dp)
                         .clickable { navController.navigate(Screen.UserProfile.route) },
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    tint = MaterialTheme.colorScheme.secondary
                 )
 
             Spacer(modifier = Modifier.width(16.dp))
@@ -124,7 +124,7 @@ fun Topbar(
                 modifier = Modifier
                     .size(30.dp)
                     .clickable { },
-                tint = MaterialTheme.colorScheme.onPrimary
+                tint = MaterialTheme.colorScheme.secondary
             )
         }
     }
