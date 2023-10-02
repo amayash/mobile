@@ -45,14 +45,14 @@ fun SessionList() {
 
             Text(
                 text = formattedDate,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground,
             )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(Gray)
+                    .background(MaterialTheme.colorScheme.secondary)
             ) {
                 Row(
                     modifier = Modifier
@@ -64,15 +64,18 @@ fun SessionList() {
                     Image(
                         painter = painterResource(id = session.cinema.image),
                         contentDescription = null,
-                        modifier = Modifier.size(100.dp)
+                        modifier = Modifier.size(90.dp)
                     )
 
                     Column(
                         modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Text(text = "${session.cinema.name}, ${session.cinema.year}")
-                        Text(text = "${session.currentCount}/${session.maxCount}")
+                        Text(
+                            text = "${session.cinema.name}, ${session.cinema.year}\n" +
+                                    "${session.currentCount}/${session.maxCount}",
+                            color = MaterialTheme.colorScheme.onSecondary
+                        )
                     }
                 }
 
@@ -83,7 +86,8 @@ fun SessionList() {
                         .padding(10.dp)
                         .size(24.dp)
                         .clickable {}
-                        .align(Alignment.CenterEnd)
+                        .align(Alignment.CenterEnd),
+                    tint = MaterialTheme.colorScheme.onSecondary
                 )
             }
         }

@@ -7,8 +7,11 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import com.example.myapplication.R
 
 enum class Screen(
@@ -21,7 +24,7 @@ enum class Screen(
         "Cinema-list", R.string.Cinema_main_title, Icons.Filled.Home
     ),
     SessionList(
-        "Session-list", R.string.Sessions_title,
+        "Session-list", R.string.Sessions_title
     ),
     Cart(
         "cart", R.string.Cart_title, Icons.Filled.ShoppingCart

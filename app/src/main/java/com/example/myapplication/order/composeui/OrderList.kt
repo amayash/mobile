@@ -44,7 +44,7 @@ fun OrderList(navController: NavController?) {
                     .padding(all = 10.dp)
                     .clickable { navController?.navigate(orderId) }
                     .background(
-                        color = Gray,
+                        color = MaterialTheme.colorScheme.secondary,
                         shape = RoundedCornerShape(16.dp)
                     )
             ) {
@@ -55,8 +55,7 @@ fun OrderList(navController: NavController?) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-
-                    Text("Заказ №${index}")
+                    Text("Заказ №${index}", color = MaterialTheme.colorScheme.onSecondary)
                 }
             }
         }

@@ -17,16 +17,26 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
-    //background = BgGray,
+    primary = DarkGray,
+    onPrimary = Color.White,
+
+    secondary = Gray,
+    onSecondary = Color.Black,
+
+    background = BgGray,
+    onBackground = Color.White,
+    tertiary = BgGray,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
+    primary = LightBlueGray,
+    onPrimary = Color.White,
+
+    secondary = LightGray,
+    onSecondary = Color.Black,
+
+    onBackground = Color.Black,
+    tertiary = LightBgGray,
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -43,7 +53,7 @@ private val LightColorScheme = lightColorScheme(
 fun PmudemoTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

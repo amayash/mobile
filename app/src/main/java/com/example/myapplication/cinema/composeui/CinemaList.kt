@@ -50,7 +50,7 @@ fun CinemaList(navController: NavController?) {
                     .padding(all = 10.dp)
                     .clickable { navController?.navigate(cinemaId) }
                     .background(
-                        color = Gray,
+                        color = MaterialTheme.colorScheme.secondary,
                         shape = RoundedCornerShape(16.dp)
                     )
             ) {
@@ -64,10 +64,10 @@ fun CinemaList(navController: NavController?) {
                     Image(
                         painter = painterResource(id = cinema.image),
                         contentDescription = null,
-                        modifier = Modifier.size(100.dp)
+                        modifier = Modifier.size(90.dp)
                     )
 
-                    Text("${cinema.name}, ${cinema.year}")
+                    Text("${cinema.name}, ${cinema.year}", color = MaterialTheme.colorScheme.onSecondary)
                 }
             }
         }

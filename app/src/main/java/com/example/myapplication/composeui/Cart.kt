@@ -52,7 +52,6 @@ fun Cart() {
 
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
             .padding(all = 10.dp)
     ) {
         itemsIndexed(sessions) { index, session ->
@@ -63,16 +62,14 @@ fun Cart() {
 
             Text(
                 text = formattedDate,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground,
             )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(all = 10.dp)
-                    .background(
-                        color = Gray,
-                        shape = RoundedCornerShape(16.dp)
-                    )
+                    .padding(10.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.secondary)
             ) {
                 Row(
                     modifier = Modifier
@@ -97,7 +94,7 @@ fun Cart() {
 
                     Box(
                         modifier = Modifier
-                            .background(color = Color.Gray, shape = RoundedCornerShape(10.dp)) // Задаем фон для кнопок
+                            .background(color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(10.dp)) // Задаем фон для кнопок
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically
@@ -112,14 +109,14 @@ fun Cart() {
                                 Icon(
                                     imageVector = ImageVector.vectorResource(id = R.drawable.minus),
                                     contentDescription = "Уменьшить",
-                                    tint = Color.White,
+                                    tint = MaterialTheme.colorScheme.onBackground,
                                     modifier = Modifier.size(10.dp)
                                 )
                             }
 
                             Text(
                                 text = "$currentCount",
-                                color = Color.White
+                                color = MaterialTheme.colorScheme.onBackground
                             )
 
                             IconButton(
@@ -132,7 +129,7 @@ fun Cart() {
                                 Icon(
                                     imageVector = Icons.Default.Add,
                                     contentDescription = "Увеличить",
-                                    tint = Color.White,
+                                    tint = MaterialTheme.colorScheme.onBackground,
                                     modifier = Modifier.size(10.dp)
                                 )
                             }

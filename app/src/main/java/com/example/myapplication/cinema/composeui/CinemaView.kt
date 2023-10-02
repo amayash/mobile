@@ -3,10 +3,12 @@ package com.example.myapplication.cinema.composeui
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,16 +38,15 @@ import com.example.myapplication.cinema.model.getCinemas
 import com.example.myapplication.ui.theme.Gray
 import com.example.myapplication.ui.theme.PmudemoTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CinemaView(id: Int) {
     val cinema = getCinemas()[id]
     Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(16.dp)
             .background(
-                color = Gray,
+                color = MaterialTheme.colorScheme.secondary,
                 shape = RoundedCornerShape(16.dp)
             )
     ) {
@@ -53,35 +54,34 @@ fun CinemaView(id: Int) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
+                .background(color = MaterialTheme.colorScheme.secondary),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = cinema.image),
-                    contentDescription = null,
-                    modifier = Modifier.size(100.dp)
-                )
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Text(
-                    text = "${cinema.name}, ${cinema.year}",
-                    style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold),
-                    modifier = Modifier.weight(1f) // Растягиваем текст на всю доступную ширину
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
             Text(
-                text = cinema.description,
-                style = TextStyle(fontSize = 14.sp)
+                text = "${cinema.name}, ${cinema.year}",
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.onSecondary
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
             )
+
+            Image(
+                painter = painterResource(id = cinema.image),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+            )
+
+            Text(text = cinema.description, color = MaterialTheme.colorScheme.onSecondary)
         }
     }
 }
+
 
 @Preview(name = "Light Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)

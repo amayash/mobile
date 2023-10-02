@@ -30,6 +30,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,11 +64,11 @@ fun Topbar(
     navController: NavHostController,
     currentScreen: Screen?
 ) {
-    val appBarBackgroundColor = MaterialTheme.colorScheme.primary
+    var searchQuery by remember { mutableStateOf("") }
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = DarkGray)
+            .background(color = MaterialTheme.colorScheme.primary)
     ) {
         Row(
             modifier = Modifier
@@ -83,7 +86,7 @@ fun Topbar(
                     modifier = Modifier
                         .size(30.dp)
                         .clickable { navController.navigateUp() },
-                    tint = Color.White
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             } else
                 Icon(
@@ -92,18 +95,18 @@ fun Topbar(
                     modifier = Modifier
                         .size(30.dp)
                         .clickable { navController.navigate(Screen.UserProfile.route) },
-                    tint = Color.White
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
 
             Spacer(modifier = Modifier.width(16.dp))
 
             BasicTextField(
-                value = "",
-                onValueChange = { },
+                value = searchQuery,
+                onValueChange = { newValue -> searchQuery = newValue },
                 modifier = Modifier
                     .weight(1f)
                     .height(36.dp)
-                    .background(Color.LightGray, RoundedCornerShape(18.dp))
+                    .background(color = MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(18.dp))
                     .padding(start = 13.dp, top = 8.dp),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = androidx.compose.ui.text.input.ImeAction.Search
@@ -121,7 +124,7 @@ fun Topbar(
                 modifier = Modifier
                     .size(30.dp)
                     .clickable { },
-                tint = Color.White
+                tint = MaterialTheme.colorScheme.onPrimary
             )
         }
     }
@@ -133,10 +136,10 @@ fun Navbar(
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier
 ) {
-    NavigationBar(modifier = modifier.background(color = Color.Blue)) {
+    NavigationBar(modifier = modifier, containerColor = MaterialTheme.colorScheme.primary) {
         Screen.bottomBarItems.forEach { screen ->
             NavigationBarItem(
-                icon = { Icon(screen.icon, contentDescription = null) },
+                icon = { Icon(screen.icon, contentDescription = null, tint = MaterialTheme.colorScheme.secondary) },
                 label = { Text(stringResource(screen.resourceId)) },
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 onClick = {

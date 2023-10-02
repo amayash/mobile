@@ -52,7 +52,7 @@ fun UserProfile(navController: NavController?) {
         Text(
             text = "Логин",
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground
         )
         BasicTextField(
             value = username,
@@ -60,14 +60,14 @@ fun UserProfile(navController: NavController?) {
             modifier = Modifier
                 .fillMaxWidth()
                 .size(36.dp)
-                .background(Color.LightGray, RoundedCornerShape(18.dp))
+                .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(18.dp))
                 .padding(start = 13.dp, top = 8.dp)
         )
 
         Text(
             text = "Пароль",
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground
         )
         BasicTextField(
             value = password,
@@ -75,7 +75,7 @@ fun UserProfile(navController: NavController?) {
             modifier = Modifier
                 .fillMaxWidth()
                 .size(36.dp)
-                .background(Color.LightGray, RoundedCornerShape(18.dp))
+                .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(18.dp))
                 .padding(start = 13.dp, top = 8.dp),
             visualTransformation = PasswordVisualTransformation()
         )
@@ -96,7 +96,7 @@ fun UserProfile(navController: NavController?) {
                         isRegistration = false
                     }
                     .align(Alignment.CenterHorizontally),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground
             )
         } else {
             Button(
@@ -114,7 +114,7 @@ fun UserProfile(navController: NavController?) {
                         isRegistration = true
                     }
                     .align(Alignment.CenterHorizontally),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
     }
