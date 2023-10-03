@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +19,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -38,7 +41,7 @@ import com.example.myapplication.ui.theme.Gray
 import com.example.myapplication.ui.theme.PmudemoTheme
 
 @Composable
-fun UserProfile(navController: NavController?) {
+fun UserProfile(navController: NavController?, switchDarkTheme: () -> Unit, isDarkTheme: Boolean) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isRegistration by remember { mutableStateOf(false) }
@@ -117,6 +120,37 @@ fun UserProfile(navController: NavController?) {
                 color = MaterialTheme.colorScheme.onBackground
             )
         }
+        val switchColors = if (isDarkTheme) {
+            SwitchDefaults.colors(
+                checkedThumbColor = Color.White, // Change the color when the switch is checked
+                checkedTrackColor = Color.Gray,  // Change the color of the track when the switch is checked
+                uncheckedThumbColor = Color.Gray, // Change the color when the switch is unchecked
+                uncheckedTrackColor = Color.LightGray // Change the color of the track when the switch is unchecked
+            )
+        } else {
+            SwitchDefaults.colors(
+                checkedThumbColor = Color.Black, // Change the color when the switch is checked
+                checkedTrackColor = Color.Gray,  // Change the color of the track when the switch is checked
+                uncheckedThumbColor = Color.Gray, // Change the color when the switch is unchecked
+                uncheckedTrackColor = Color.LightGray // Change the color of the track when the switch is unchecked
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Text("Dark Theme", modifier = Modifier.align(Alignment.CenterVertically).padding(5.dp), color = MaterialTheme.colorScheme.onBackground)
+
+            Switch(
+                checked = isDarkTheme,
+                onCheckedChange = {
+                    switchDarkTheme()
+                },
+                colors = switchColors
+            )
+        }
     }
 }
 
@@ -129,7 +163,7 @@ fun UserProfilePreview() {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            UserProfile(navController = null)
+            UserProfile(navController = null, switchDarkTheme = {}, isDarkTheme = true)
         }
     }
 }

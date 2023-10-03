@@ -159,8 +159,10 @@ fun Navbar(
 @Composable
 fun Navhost(
     navController: NavHostController,
-    innerPadding: PaddingValues, modifier:
-    Modifier = Modifier
+    innerPadding: PaddingValues,
+    switchDarkTheme: () -> Unit,
+    isDarkTheme: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     NavHost(
         navController,
@@ -170,7 +172,7 @@ fun Navhost(
         composable(Screen.CinemaList.route) { CinemaList(navController) }
         composable(Screen.OrderList.route) { OrderList(navController) }
         composable(Screen.Cart.route) { Cart() }
-        composable(Screen.UserProfile.route) { UserProfile(navController) }
+        composable(Screen.UserProfile.route) { UserProfile(navController, switchDarkTheme, isDarkTheme) }
         composable(Screen.SessionList.route) { SessionList() }
         composable(
             Screen.CinemaView.route,
@@ -189,7 +191,10 @@ fun Navhost(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainNavbar() {
+fun MainNavbar(
+    switchDarkTheme: () -> Unit,
+    isDarkTheme: Boolean
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -205,7 +210,7 @@ fun MainNavbar() {
             }
         }
     ) { innerPadding ->
-        Navhost(navController, innerPadding)
+        Navhost(navController, innerPadding, switchDarkTheme, isDarkTheme)
     }
 }
 
@@ -213,11 +218,11 @@ fun MainNavbar() {
 @Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun MainNavbarPreview() {
-    PmudemoTheme {
+    PmudemoTheme() {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            MainNavbar()
+            MainNavbar({}, true)
         }
     }
 }
