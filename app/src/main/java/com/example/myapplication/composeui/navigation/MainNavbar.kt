@@ -29,6 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +53,7 @@ import androidx.navigation.navArgument
 import com.example.myapplication.cinema.composeui.CinemaList
 import com.example.myapplication.cinema.composeui.CinemaView
 import com.example.myapplication.composeui.Cart
+import com.example.myapplication.datastore.DataStoreManager
 import com.example.myapplication.order.composeui.OrderList
 import com.example.myapplication.order.composeui.OrderView
 import com.example.myapplication.session.composeui.SessionList
@@ -160,8 +162,8 @@ fun Navbar(
 fun Navhost(
     navController: NavHostController,
     innerPadding: PaddingValues,
-    switchDarkTheme: () -> Unit,
-    isDarkTheme: Boolean,
+    isDarkTheme: MutableState<Boolean>,
+    dataStore: DataStoreManager,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
@@ -172,7 +174,7 @@ fun Navhost(
         composable(Screen.CinemaList.route) { CinemaList(navController) }
         composable(Screen.OrderList.route) { OrderList(navController) }
         composable(Screen.Cart.route) { Cart() }
-        composable(Screen.UserProfile.route) { UserProfile(navController, switchDarkTheme, isDarkTheme) }
+        composable(Screen.UserProfile.route) { UserProfile(navController, isDarkTheme, dataStore) }
         composable(Screen.SessionList.route) { SessionList() }
         composable(
             Screen.CinemaView.route,
@@ -192,8 +194,8 @@ fun Navhost(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainNavbar(
-    switchDarkTheme: () -> Unit,
-    isDarkTheme: Boolean
+    isDarkTheme: MutableState<Boolean>,
+    dataStoreManager: DataStoreManager
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -210,10 +212,10 @@ fun MainNavbar(
             }
         }
     ) { innerPadding ->
-        Navhost(navController, innerPadding, switchDarkTheme, isDarkTheme)
+        Navhost(navController, innerPadding, isDarkTheme, dataStoreManager)
     }
 }
-
+/*
 @Preview(name = "Light Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -222,7 +224,7 @@ fun MainNavbarPreview() {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            MainNavbar({}, true)
+            MainNavbar(remember { mutableStateOf(true) }, DataStoreManager)
         }
     }
-}
+}*/

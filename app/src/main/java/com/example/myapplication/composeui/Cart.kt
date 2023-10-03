@@ -90,8 +90,8 @@ fun Cart() {
                         modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Text(text = "${session.cinema.name}, ${session.cinema.year}")
-                        Text(text = "$currentCount/${session.maxCount}")
+                        Text(text = "${session.cinema.name}, ${session.cinema.year}\n" +
+                                "$currentCount/${session.maxCount}", color = MaterialTheme.colorScheme.onSecondary)
                     }
 
                     Box(
