@@ -1,6 +1,8 @@
 package com.example.myapplication.cinema.model
 
 import com.example.myapplication.R
+import com.example.myapplication.session.model.Session
+import com.example.myapplication.session.model.getSessions
 import java.io.Serializable
 
 data class Cinema(
@@ -13,6 +15,6 @@ data class Cinema(
 fun getCinemas(): List<Cinema> {
     return listOf(
         Cinema("First1", "new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema new cinema ", R.drawable.photo, 2023),
-        Cinema("First2", "new cinema 123", R.drawable.photo, 2024),
+        Cinema("First2", "new cinema 123", R.drawable.photo, 2024)
     )
 }

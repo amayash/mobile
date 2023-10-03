@@ -4,13 +4,18 @@ import com.example.myapplication.cinema.model.Cinema
 import com.example.myapplication.cinema.model.getCinemas
 import java.io.Serializable
 import org.threeten.bp.LocalDateTime;
+import kotlin.streams.toList
 
 data class Session(
     val dateTime: LocalDateTime,
     val cinema: Cinema,
     val currentCount: Int,
     val maxCount: Int
-    ) : Serializable
+    )
+
+fun getSessions(cinema: Cinema): List<Session> {
+    return getSessions().stream().filter{ value -> value.cinema == cinema }.toList();
+}
 
 fun getSessions(): List<Session> {
     return listOf(

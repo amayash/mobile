@@ -24,7 +24,7 @@ enum class Screen(
         "Cinema-list", R.string.Cinema_main_title, Icons.Filled.Home
     ),
     SessionList(
-        "Session-list", R.string.Sessions_title
+        "Session-list", R.string.Sessions_title, showInBottomBar = false
     ),
     Cart(
         "cart", R.string.Cart_title, Icons.Filled.ShoppingCart
@@ -45,7 +45,6 @@ enum class Screen(
     companion object {
         val bottomBarItems = listOf(
             CinemaList,
-            SessionList,
             Cart,
             OrderList
         )
