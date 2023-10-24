@@ -4,14 +4,9 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.Icon
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import com.example.myapplication.R
 
 enum class Screen(
@@ -30,7 +25,7 @@ enum class Screen(
         "cart", R.string.Cart_title, Icons.Filled.ShoppingCart
     ),
     OrderList(
-    "Order-list", R.string.Order_title, Icons.Filled.List
+        "Order-list", R.string.Order_title, Icons.Filled.List
     ),
     CinemaView(
         "Cinema-view/{id}", R.string.Cinema_view_title, showInBottomBar = false

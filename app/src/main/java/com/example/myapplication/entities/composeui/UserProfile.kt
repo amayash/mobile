@@ -1,29 +1,22 @@
 package com.example.myapplication.user.composeui
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -33,26 +26,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.myapplication.composeui.navigation.Screen
 import com.example.myapplication.datastore.DataStoreManager
 import com.example.myapplication.datastore.SettingData
-import com.example.myapplication.session.composeui.SessionList
-import com.example.myapplication.ui.theme.Gray
-import com.example.myapplication.ui.theme.PmudemoTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun UserProfile(navController: NavController?, isDarkTheme: MutableState<Boolean>, dataStoreManager: DataStoreManager) {
+fun UserProfile(
+    isDarkTheme: MutableState<Boolean>,
+    dataStoreManager: DataStoreManager
+) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isRegistration by remember { mutableStateOf(false) }
 
-    LazyColumn() {
+    LazyColumn {
         item {
             Column(
                 modifier = Modifier
