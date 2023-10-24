@@ -10,12 +10,13 @@ import kotlinx.coroutines.flow.map
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("data_store")
 
-class DataStoreManager(private val context : Context) {
+class DataStoreManager(private val context: Context) {
     suspend fun saveSettings(settingData: SettingData) {
         context.dataStore.edit { pref ->
             pref[booleanPreferencesKey("isDarkTheme")] = settingData.isDarkTheme
         }
     }
+
     fun getSettings() = context.dataStore.data.map { pref ->
         return@map SettingData(
             pref[booleanPreferencesKey("isDarkTheme")] ?: true

@@ -1,26 +1,22 @@
 package com.example.myapplication.composeui
 
 import android.content.res.Configuration
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,37 +24,50 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
-import com.example.myapplication.session.model.getSessions
-import com.example.myapplication.ui.theme.DarkGray
-import com.example.myapplication.ui.theme.Gray
+import com.example.myapplication.database.AppDatabase
+import com.example.myapplication.entities.model.UserWithSession
 import com.example.myapplication.ui.theme.PmudemoTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.threeten.bp.format.DateTimeFormatter
 
 @Composable
-fun Cart() {
-    val sessions = getSessions()
+fun Cart(id: Int) {
+    val context = LocalContext.current
+    val items = remember { mutableStateListOf<UserWithSession>() }
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            AppDatabase.getInstance(context).userSessionCrossRefDao().getByUid(id).collect { data ->
+                items.clear()
+                items.addAll(data)
+            }
+        }
+    }
 
     LazyColumn(
         modifier = Modifier
             .padding(all = 10.dp)
     ) {
-        itemsIndexed(sessions) { index, session ->
-            var currentCount by remember { mutableStateOf(session.currentCount) }
-            
+        items(items) { item ->
+            val session = item.session
+            var currentCount by remember { mutableStateOf(item.count) }
+
             val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
             val formattedDate = dateFormatter.format(session.dateTime)
 
@@ -80,23 +89,36 @@ fun Cart() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Image(
-                        painter = painterResource(id = session.cinema.image),
-                        contentDescription = null,
-                        modifier = Modifier.size(90.dp)
-                    )
+                    if (session.cinema.image != null)
+                        Image(
+                            bitmap = BitmapFactory.decodeByteArray(
+                                session.cinema.image,
+                                0,
+                                session.cinema.image.size
+                            ).asImageBitmap(),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(90.dp)
+                                .padding(4.dp)
+                        )
 
                     Column(
                         modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Text(text = "${session.cinema.name}, ${session.cinema.year}\n" +
-                                "$currentCount/${session.maxCount}", color = MaterialTheme.colorScheme.onSecondary)
+                        Text(
+                            text = "${session.cinema.name}, ${session.cinema.year}\n" +
+                                    "${currentCount}/${session.maxCount}",
+                            color = MaterialTheme.colorScheme.onSecondary
+                        )
                     }
 
                     Box(
                         modifier = Modifier
-                            .background(color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(10.dp)) // Задаем фон для кнопок
+                            .background(
+                                color = MaterialTheme.colorScheme.background,
+                                shape = RoundedCornerShape(10.dp)
+                            ) // Задаем фон для кнопок
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically
@@ -141,7 +163,7 @@ fun Cart() {
             }
         }
     }
-    Column() {
+    Column {
         Spacer(modifier = Modifier.weight(1f))
 
         Button(
@@ -162,7 +184,7 @@ fun CartPreview() {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            Cart()
+            Cart(1)
         }
     }
 }
