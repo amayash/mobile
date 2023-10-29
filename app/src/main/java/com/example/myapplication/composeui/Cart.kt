@@ -41,7 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import com.example.myapplication.database.AppDatabase
-import com.example.myapplication.entities.model.UserWithSession
+import com.example.myapplication.entities.model.SessionFromCart
 import com.example.myapplication.ui.theme.PmudemoTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -50,12 +50,12 @@ import org.threeten.bp.format.DateTimeFormatter
 @Composable
 fun Cart(id: Int) {
     val context = LocalContext.current
-    val items = remember { mutableStateListOf<UserWithSession>() }
+    val sessions = remember { mutableStateListOf<SessionFromCart>() }
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
-            AppDatabase.getInstance(context).userSessionCrossRefDao().getByUid(id).collect { data ->
-                items.clear()
-                items.addAll(data)
+            AppDatabase.getInstance(context).userDao().getCartByUid(id).collect { data ->
+                sessions.clear()
+                sessions.addAll(data)
             }
         }
     }
@@ -64,9 +64,8 @@ fun Cart(id: Int) {
         modifier = Modifier
             .padding(all = 10.dp)
     ) {
-        items(items) { item ->
-            val session = item.session
-            var currentCount by remember { mutableStateOf(item.count) }
+        items(sessions) { session ->
+            var currentCount by remember { mutableStateOf(session.count) }
 
             val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
             val formattedDate = dateFormatter.format(session.dateTime)
@@ -108,7 +107,8 @@ fun Cart(id: Int) {
                     ) {
                         Text(
                             text = "${session.cinema.name}, ${session.cinema.year}\n" +
-                                    "${currentCount}/${session.maxCount}",
+                                    "Цена: ${session.price}\n" +
+                                    "${currentCount}/${session.availableCount}",
                             color = MaterialTheme.colorScheme.onSecondary
                         )
                     }
@@ -145,7 +145,7 @@ fun Cart(id: Int) {
 
                             IconButton(
                                 onClick = {
-                                    if (currentCount < session.maxCount) {
+                                    if (currentCount < session.availableCount) {
                                         currentCount++
                                     }
                                 }

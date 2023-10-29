@@ -25,6 +25,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -38,7 +39,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.database.AppDatabase
-import com.example.myapplication.entities.model.CinemaWithSessions
+import com.example.myapplication.entities.model.Cinema
+import com.example.myapplication.entities.model.SessionFromCinema
 import com.example.myapplication.ui.theme.PmudemoTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -47,17 +49,20 @@ import org.threeten.bp.format.DateTimeFormatter
 @Composable
 fun CinemaView(id: Int) {
     val context = LocalContext.current
-    val (cinemaWithSessions, setCinemaWithSessions) = remember {
-        mutableStateOf<CinemaWithSessions?>(null)
+    val cinemaWithSessions = remember {
+        mutableStateListOf<Pair<Cinema, List<SessionFromCinema>>>()
     }
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
-            setCinemaWithSessions(AppDatabase.getInstance(context).cinemaDao().getByUid(id))
+            cinemaWithSessions.clear()
+            cinemaWithSessions
+                .addAll(AppDatabase.getInstance(context).cinemaDao().getByUid(id).map { (cinema, sessionFromCinema) ->
+                    Pair(cinema, sessionFromCinema)
+            })
         }
     }
-
-    val cinema = cinemaWithSessions?.cinema
-    val sessions = cinemaWithSessions?.sessions
+    val cinema = cinemaWithSessions.firstOrNull()?.first
+    val sessions = cinemaWithSessions.firstOrNull()?.second
 
     LazyColumn(
         modifier = Modifier
@@ -128,13 +133,6 @@ fun CinemaView(id: Int) {
 
         if (sessions != null) {
             items(sessions) { session ->
-                val countOfBusySessions = remember { mutableStateOf(0) }
-                LaunchedEffect(Unit) {
-                    withContext(Dispatchers.IO) {
-                        countOfBusySessions.value = AppDatabase.getInstance(context).orderSessionCrossRefDao().getCountOfBusySessions(session.uid ?: 0)
-                    }
-                }
-
                 val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
                 val formattedDate = dateFormatter.format(session.dateTime)
                 Text(
@@ -168,13 +166,13 @@ fun CinemaView(id: Int) {
                                     .padding(4.dp)
                             )
 
-                        val availableSeats = session.maxCount - countOfBusySessions.value
                         Column(
                             modifier = Modifier.weight(1f),
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             Text(
-                                text = "0/${availableSeats}",
+                                text = "Цена: ${session.price}\n" +
+                                        "Билетов: ${session.availableCount}",
                                 color = MaterialTheme.colorScheme.onSecondary
                             )
                         }

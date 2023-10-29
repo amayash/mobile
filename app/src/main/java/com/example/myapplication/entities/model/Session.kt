@@ -23,17 +23,19 @@ data class Session(
     val uid: Int?,
     @ColumnInfo(name = "date_time")
     val dateTime: LocalDateTime,
+    val price: Double,
+    @ColumnInfo(name = "max_count")
+    val maxCount: Int,
     @ColumnInfo(name = "cinema_id", index = true)
     val cinemaId: Int?,
-    @ColumnInfo(name = "max_count")
-    val maxCount: Int
 ) {
     @Ignore
     constructor(
         dateTime: LocalDateTime,
+        price: Double,
+        maxCount: Int,
         cinema: Cinema,
-        maxCount: Int
-    ) : this(null, dateTime, cinema.uid, maxCount)
+    ) : this(null, dateTime, price, maxCount, cinema.uid)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
