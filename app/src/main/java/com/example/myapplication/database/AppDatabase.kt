@@ -79,24 +79,28 @@ abstract class AppDatabase : RoomDatabase() {
                 val session1 = Session(1, LocalDateTime.now(), 150.0, 120, cinema1.uid)
                 val session2 = Session(2, LocalDateTime.now(), 200.0, 110, cinema2.uid)
                 val session3 = Session(3, LocalDateTime.now(), 300.0, 100, cinema3.uid)
+                val session4 = Session(4, LocalDateTime.now(), 320.0, 1150, cinema1.uid)
                 sessionDao.insert(session1)
                 sessionDao.insert(session2)
                 sessionDao.insert(session3)
+                sessionDao.insert(session4)
                 // OrderSessionCrossRef для связи заказов с сеансами
                 val orderSessionCrossRefDao = database.orderSessionCrossRefDao()
-                if (session1.uid != null && session2.uid != null && session3.uid != null) {
+                if (session1.uid != null && session2.uid != null && session3.uid != null && session4.uid != null) {
                     val orderSessionCrossRef1 = OrderSessionCrossRef(order1.uid, session3.uid, 150.0, 5)
                     val orderSessionCrossRef2 = OrderSessionCrossRef(order1.uid, session2.uid, 300.0, 10)
                     val orderSessionCrossRef3 = OrderSessionCrossRef(order2.uid, session2.uid, 350.0, 6)
                     val orderSessionCrossRef4 = OrderSessionCrossRef(order3.uid, session1.uid, 250.0, 10)
                     val orderSessionCrossRef5 = OrderSessionCrossRef(order3.uid, session3.uid, 150.0, 16)
                     val orderSessionCrossRef6 = OrderSessionCrossRef(order4.uid, session3.uid, 150.0, 2)
+                    //val orderSessionCrossRef7 = OrderSessionCrossRef(order4.uid, session4.uid, 110.0, 1)
                     orderSessionCrossRefDao.insert(orderSessionCrossRef1)
                     orderSessionCrossRefDao.insert(orderSessionCrossRef2)
                     orderSessionCrossRefDao.insert(orderSessionCrossRef3)
                     orderSessionCrossRefDao.insert(orderSessionCrossRef4)
                     orderSessionCrossRefDao.insert(orderSessionCrossRef5)
                     orderSessionCrossRefDao.insert(orderSessionCrossRef6)
+                    //orderSessionCrossRefDao.insert(orderSessionCrossRef7)
                 }
                 // UserSessions
                 val userSessionCrossRefDao = database.userSessionCrossRefDao()
