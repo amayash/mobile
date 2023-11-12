@@ -18,6 +18,15 @@ enum class Screen(
     CinemaList(
         "Cinema-list", R.string.Cinema_main_title, Icons.Filled.Home
     ),
+    CinemaEdit(
+        "Cinema-edit/{id}", R.string.Cinema_view_title, showInBottomBar = false
+    ),
+    SessionEdit(
+        "Session-edit/{id}", R.string.Session_view_title, showInBottomBar = false
+    ),
+    CinemaView(
+        "Cinema-view/{id}", R.string.Cinema_view_title, showInBottomBar = false
+    ),
     SessionList(
         "Session-list", R.string.Sessions_title, showInBottomBar = false
     ),
@@ -26,9 +35,6 @@ enum class Screen(
     ),
     OrderList(
         "Order-list", R.string.Order_title, Icons.Filled.List
-    ),
-    CinemaView(
-        "Cinema-view/{id}", R.string.Cinema_view_title, showInBottomBar = false
     ),
     OrderView(
         "Order-view/{id}", R.string.Order_view_title, showInBottomBar = false

@@ -2,6 +2,7 @@
     <string name="app_name">pmu-demo</string>
     <string name="Cinema_main_title">Фильмы</string>
     <string name="Cinema_view_title">Фильм</string>
+    <string name="Session_view_title">Сеанс</string>
     <string name="Order_view_title">Заказ</string>
     <string name="Cinema_name">Название</string>
     <string name="Cinema_year">Год</string>
@@ -11,4 +12,9 @@
     <string name="Order_title">Мои заказы</string>
     <string name="Profile_title">Профиль</string>
     <string name="Sessions_title">Сеансы</string>
+    <string name="Session_dateTime">Время</string>
+    <string name="Save_button">Сохранить</string>
+    <string name="Cinema_empty_description">Записи о фильмах отсутствуют</string>
+    <string name="Session_empty_description">Записи о сеансах отсутствуют</string>
+    <string name="session_cinema_not_select">Фильм не указан</string>
 </resources>

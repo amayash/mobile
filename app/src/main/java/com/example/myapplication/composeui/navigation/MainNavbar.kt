@@ -47,12 +47,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.myapplication.composeui.Cart
+import com.example.myapplication.database.entities.composeui.CinemaList
+import com.example.myapplication.database.entities.composeui.CinemaView
+import com.example.myapplication.database.entities.composeui.OrderList
+import com.example.myapplication.database.entities.composeui.OrderView
 import com.example.myapplication.datastore.DataStoreManager
-import com.example.myapplication.entities.composeui.CinemaList
-import com.example.myapplication.entities.composeui.CinemaView
-import com.example.myapplication.entities.composeui.OrderList
-import com.example.myapplication.entities.composeui.OrderView
-import com.example.myapplication.user.composeui.UserProfile
+import com.example.myapplication.database.entities.composeui.UserProfile
+import com.example.myapplication.database.entities.composeui.edit.CinemaEdit
+import com.example.myapplication.database.entities.composeui.edit.SessionEdit
 
 @Composable
 fun Topbar(
@@ -178,10 +180,22 @@ fun Navhost(
         composable(Screen.Cart.route) { Cart(1) }
         composable(Screen.UserProfile.route) { UserProfile(isDarkTheme, dataStore) }
         composable(
+            Screen.CinemaEdit.route,
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) {
+            CinemaEdit(navController)
+        }
+        composable(
+            Screen.SessionEdit.route,
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) {
+            SessionEdit(navController)
+        }
+        composable(
             Screen.CinemaView.route,
             arguments = listOf(navArgument("id") { type = NavType.IntType })
         ) { backStackEntry ->
-            backStackEntry.arguments?.let { CinemaView(it.getInt("id")) }
+            backStackEntry.arguments?.let { CinemaView(navController) }
         }
         composable(
             Screen.OrderView.route,

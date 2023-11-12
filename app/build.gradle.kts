@@ -53,6 +53,8 @@ android {
 dependencies {
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc")
+
     // Core
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
@@ -64,7 +66,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material3:material3:1.1.2")
 
     // Room
     val room_version = "2.5.2"

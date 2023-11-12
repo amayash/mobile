@@ -4,28 +4,28 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.myapplication.entities.dao.CinemaDao
-import com.example.myapplication.entities.dao.OrderDao
-import com.example.myapplication.entities.dao.OrderSessionCrossRefDao
-import com.example.myapplication.entities.dao.SessionDao
-import com.example.myapplication.entities.dao.UserDao
-import com.example.myapplication.entities.dao.UserSessionCrossRefDao
-import com.example.myapplication.entities.model.Cinema
-import com.example.myapplication.entities.model.LocalDateTimeConverter
-import com.example.myapplication.entities.model.Order
-import com.example.myapplication.entities.model.OrderSessionCrossRef
-import com.example.myapplication.entities.model.Session
-import com.example.myapplication.entities.model.User
-import com.example.myapplication.entities.model.UserSessionCrossRef
+import com.example.myapplication.database.entities.dao.CinemaDao
+import com.example.myapplication.database.entities.dao.OrderDao
+import com.example.myapplication.database.entities.dao.OrderSessionCrossRefDao
+import com.example.myapplication.database.entities.dao.SessionDao
+import com.example.myapplication.database.entities.dao.UserDao
+import com.example.myapplication.database.entities.dao.UserSessionCrossRefDao
+import com.example.myapplication.database.entities.model.Cinema
+import com.example.myapplication.database.entities.model.LocalDateTimeConverter
+import com.example.myapplication.database.entities.model.Order
+import com.example.myapplication.database.entities.model.OrderSessionCrossRef
+import com.example.myapplication.database.entities.model.Session
+import com.example.myapplication.database.entities.model.User
+import com.example.myapplication.database.entities.model.UserSessionCrossRef
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
 import java.io.ByteArrayOutputStream
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [Cinema::class, Session::class, Order::class,
@@ -79,9 +79,11 @@ abstract class AppDatabase : RoomDatabase() {
                 val session1 = Session(1, LocalDateTime.now(), 150.0, 120, cinema1.uid)
                 val session2 = Session(2, LocalDateTime.now(), 200.0, 110, cinema2.uid)
                 val session3 = Session(3, LocalDateTime.now(), 300.0, 100, cinema3.uid)
+                val session4 = Session(4, LocalDateTime.now(), 450.0, 200, cinema1.uid)
                 sessionDao.insert(session1)
                 sessionDao.insert(session2)
                 sessionDao.insert(session3)
+                sessionDao.insert(session4)
                 // OrderSessionCrossRef для связи заказов с сеансами
                 val orderSessionCrossRefDao = database.orderSessionCrossRefDao()
                 if (session1.uid != null && session2.uid != null && session3.uid != null) {
