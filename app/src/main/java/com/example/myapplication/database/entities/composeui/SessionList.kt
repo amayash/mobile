@@ -55,6 +55,11 @@ fun SessionList(
             }
         } else {
             items(cinemaWithSessions.sessions, key = { it.uid }) { session ->
+                val route = Screen.SessionEdit.route.replace(
+                    "{id}", session.uid.toString()
+                ).replace(
+                    "{cinemaId}", cinemaWithSessions.cinema.uid.toString()
+                )
                 val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
                 val formattedDate = dateFormatter.format(session.dateTime)
                 Column {
@@ -65,13 +70,6 @@ fun SessionList(
                     Box(modifier = Modifier
                         .padding(vertical = 7.dp)
                         .clickable {
-                            val route = Screen.SessionEdit.route
-                                .replace(
-                                    "{id}", session.uid.toString()
-                                )
-                                .replace(
-                                    "{cinemaId}", cinemaWithSessions.cinema.uid.toString()
-                                )
                             navController.navigate(route)
                         }
                         .background(
@@ -124,6 +122,11 @@ fun SessionList(
                                 onClick = {
                                     coroutineScope.launch {
                                         viewModel.deleteSession(session = session)
+                                        navController.popBackStack()
+                                        navController
+                                            .navigate(Screen.CinemaView.route
+                                                .replace("{id}",
+                                                    cinemaWithSessions.cinema.uid.toString()))
                                     }
                                 },
                             ) {

@@ -44,6 +44,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.myapplication.R
+import com.example.myapplication.composeui.navigation.Screen
 import com.example.myapplication.database.entities.composeui.AppViewModelProvider
 import com.example.myapplication.database.entities.model.Cinema
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -68,9 +69,15 @@ fun SessionEdit(
     SessionEdit(
         sessionUiState = viewModel.sessionUiState,
         onClick = {
+            sessionId: Int ->
             coroutineScope.launch {
                 viewModel.saveSession()
                 navController.popBackStack()
+                navController.popBackStack()
+                navController
+                    .navigate(
+                        Screen.CinemaView.route
+                        .replace("{id}", sessionId.toString()))
             }
         },
         onUpdate = viewModel::updateUiState
@@ -84,7 +91,7 @@ fun Long.toLocalDate(): org.threeten.bp.LocalDate {
 @Composable
 private fun SessionEdit(
     sessionUiState: SessionUiState,
-    onClick: () -> Unit,
+    onClick: (sessionId: Int) -> Unit,
     onUpdate: (SessionDetails) -> Unit,
 ) {
     LazyColumn(
@@ -161,7 +168,7 @@ private fun SessionEdit(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
             Button(
-                onClick = onClick,
+                onClick = { onClick(sessionUiState.sessionDetails.uid) },
                 enabled = sessionUiState.isEntryValid,
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier.fillMaxWidth()
