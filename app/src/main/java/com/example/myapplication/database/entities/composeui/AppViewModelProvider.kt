@@ -26,6 +26,11 @@ object AppViewModelProvider {
                 this.createSavedStateHandle(),
                 cinemaApplication().container.cinemaRepository,
                 cinemaApplication().container.sessionRepository,
+            )
+        }
+        initializer {
+            SessionListViewModel(
+                cinemaApplication().container.sessionRepository,
                 cinemaApplication().container.userSessionRepository,
             )
         }

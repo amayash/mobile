@@ -1,6 +1,8 @@
 package com.example.myapplication.database.entities.model
 
-data class CinemaWithSessions (
+import org.threeten.bp.format.DateTimeFormatter
+
+data class CinemaWithSessions(
     val cinema: Cinema,
     val sessions: List<SessionFromCinema>
 )

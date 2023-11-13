@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -76,7 +77,11 @@ fun CinemaList(
                 coroutineScope.launch {
                     viewModel.deleteCinema(cinema)
                 }
-            }
+            },
+            onEditClick = { uid: Int ->
+                val route = Screen.CinemaEdit.route.replace("{id}", uid.toString())
+                navController.navigate(route)
+            },
         )
     }
 }
@@ -86,7 +91,8 @@ private fun CinemaList(
     modifier: Modifier = Modifier,
     pagingCinema: LazyPagingItems<Cinema>,
     onClick: (uid: Int) -> Unit,
-    onDeleteClick: (cinema: Cinema) -> Unit
+    onDeleteClick: (cinema: Cinema) -> Unit,
+    onEditClick: (cinema: Int) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -107,7 +113,8 @@ private fun CinemaList(
                                 color = MaterialTheme.colorScheme.secondary,
                                 shape = RoundedCornerShape(16.dp)
                             ),
-                        onDeleteClick = onDeleteClick
+                        onDeleteClick = onDeleteClick,
+                        onEditClick = onEditClick,
                     )
                 }
             }
@@ -120,7 +127,8 @@ private fun CinemaList(
 private fun CinemaListItem(
     cinema: Cinema,
     modifier: Modifier = Modifier,
-    onDeleteClick: (cinema: Cinema) -> Unit
+    onDeleteClick: (cinema: Cinema) -> Unit,
+    onEditClick: (cinema: Int) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -152,7 +160,16 @@ private fun CinemaListItem(
 
             // Добавляем пустое пространство для разделения текста и кнопки
             Spacer(modifier = Modifier.weight(1f))
-
+            IconButton(
+                onClick = { onEditClick(cinema.uid) },
+                modifier = Modifier.size(24.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Редактировать",
+                    tint = MaterialTheme.colorScheme.onSecondary,
+                )
+            }
             IconButton(
                 onClick = { onDeleteClick(cinema) },
                 modifier = Modifier.size(24.dp)

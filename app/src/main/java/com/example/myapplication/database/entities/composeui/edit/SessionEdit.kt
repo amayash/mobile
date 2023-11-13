@@ -56,6 +56,7 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZoneOffset
+import org.threeten.bp.format.DateTimeFormatter
 
 
 @Composable
@@ -94,6 +95,7 @@ private fun SessionEdit(
         item {
             if (sessionUiState.sessionDetails.dateTime != LocalDateTime.MIN) {
                 val selectedDateMillis = sessionUiState.sessionDetails.dateTime.toInstant(ZoneOffset.UTC).toEpochMilli()
+
                 val dateState = rememberDatePickerState(
                     initialDisplayMode = DisplayMode.Input,
                     initialSelectedDateMillis = selectedDateMillis
@@ -141,7 +143,7 @@ private fun SessionEdit(
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = sessionUiState.sessionDetails.price.toString(),
+                value = sessionUiState.sessionDetails.price,
                 label = { Text(text = "Цена") },
                 onValueChange = {
                     onUpdate(sessionUiState.sessionDetails.copy(price = it))
