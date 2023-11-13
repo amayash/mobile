@@ -54,7 +54,7 @@ fun SessionList(
                 )
             }
         } else {
-            items(cinemaWithSessions.sessions) { session ->
+            items(cinemaWithSessions.sessions, key = { it.uid }) { session ->
                 val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
                 val formattedDate = dateFormatter.format(session.dateTime)
                 Column {
