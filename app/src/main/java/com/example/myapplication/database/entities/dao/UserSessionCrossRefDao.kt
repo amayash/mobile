@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.example.myapplication.database.entities.model.UserSessionCrossRef
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserSessionCrossRefDao {

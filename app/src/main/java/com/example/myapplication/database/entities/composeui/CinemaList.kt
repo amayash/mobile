@@ -19,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,12 +26,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,7 +46,17 @@ fun CinemaList(
     viewModel: CinemaListViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val pagingCinema: LazyPagingItems<Cinema> = viewModel.call().collectAsLazyPagingItems()
+
+    val cinemaPagingItems = viewModel.cinemaPagerState.cinemaPagingData.collectAsLazyPagingItems()
+
+    fun findCinemas() {
+        coroutineScope.launch {
+            viewModel.findCinemas()
+        }
+    }
+    LaunchedEffect(1) {
+        findCinemas()
+    }
 
     Scaffold(
         topBar = {},
@@ -59,8 +66,13 @@ fun CinemaList(
                     val route = Screen.CinemaEdit.route.replace("{id}", 0.toString())
                     navController.navigate(route)
                 },
+                containerColor = MaterialTheme.colorScheme.primary,
             ) {
-                Icon(Icons.Filled.Add, "Добавить")
+                Icon(
+                    Icons.Filled.Add,
+                    "Добавить",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
     ) { innerPadding ->
@@ -68,7 +80,7 @@ fun CinemaList(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(),
-            pagingCinema = pagingCinema,
+            pagingCinema = cinemaPagingItems,
             onClick = { uid: Int ->
                 val route = Screen.CinemaView.route.replace("{id}", uid.toString())
                 navController.navigate(route)
@@ -105,7 +117,8 @@ private fun CinemaList(
             items(pagingCinema.itemCount) { index ->
                 val cinema = pagingCinema[index]
                 if (cinema != null) {
-                    CinemaListItem(cinema = cinema,
+                    CinemaListItem(
+                        cinema = cinema,
                         modifier = Modifier
                             .padding(vertical = 7.dp)
                             .clickable { onClick(cinema.uid) }

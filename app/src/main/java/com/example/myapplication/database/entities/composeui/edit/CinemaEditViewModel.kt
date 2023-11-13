@@ -10,9 +10,9 @@ import com.example.myapplication.database.entities.model.Cinema
 import com.example.myapplication.database.entities.model.CinemaWithSessions
 import com.example.myapplication.database.entities.model.SessionFromCinema
 import com.example.myapplication.database.entities.repository.CinemaRepository
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class CinemaEditViewModel(
     savedStateHandle: SavedStateHandle,

@@ -51,10 +51,10 @@ import com.example.myapplication.database.entities.composeui.CinemaList
 import com.example.myapplication.database.entities.composeui.CinemaView
 import com.example.myapplication.database.entities.composeui.OrderList
 import com.example.myapplication.database.entities.composeui.OrderView
-import com.example.myapplication.datastore.DataStoreManager
 import com.example.myapplication.database.entities.composeui.UserProfile
 import com.example.myapplication.database.entities.composeui.edit.CinemaEdit
 import com.example.myapplication.database.entities.composeui.edit.SessionEdit
+import com.example.myapplication.datastore.DataStoreManager
 
 @Composable
 fun Topbar(

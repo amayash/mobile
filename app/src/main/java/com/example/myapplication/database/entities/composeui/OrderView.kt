@@ -18,42 +18,33 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.myapplication.database.AppDatabase
-import com.example.myapplication.database.entities.model.SessionFromOrder
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.ui.theme.PmudemoTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.threeten.bp.format.DateTimeFormatter
 
 @Composable
-fun OrderView(id: Int) {
-    val context = LocalContext.current
-    val sessions = remember {
-        mutableStateListOf<SessionFromOrder>()
-    }
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            sessions.clear()
-            sessions.addAll(AppDatabase.getInstance(context).orderDao().getByUid(id))
-        }
-    }
-
+fun OrderView(
+    id: Int,
+    viewModel: OrderViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val orderUiState by viewModel.orderUiState.collectAsState()
     LazyColumn(
         modifier = Modifier
             .padding(10.dp)
     ) {
-        items(sessions) { session ->
+        items(orderUiState.sessionList) { session ->
             val count = remember { mutableStateOf(session.count) }
             val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
             val formattedDate = dateFormatter.format(session.dateTime)

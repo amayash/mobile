@@ -7,7 +7,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.myapplication.CinemaApplication
 import com.example.myapplication.database.entities.composeui.edit.CinemaEditViewModel
-import com.example.myapplication.database.entities.composeui.edit.SessionEdit
 import com.example.myapplication.database.entities.composeui.edit.SessionEditViewModel
 
 object AppViewModelProvider {
@@ -25,7 +24,6 @@ object AppViewModelProvider {
             CinemaViewModel(
                 this.createSavedStateHandle(),
                 cinemaApplication().container.cinemaRepository,
-                cinemaApplication().container.sessionRepository,
             )
         }
         initializer {
@@ -46,6 +44,17 @@ object AppViewModelProvider {
                 cinemaApplication().container.orderRepository,
                 cinemaApplication().container.orderSessionRepository,
                 cinemaApplication().container.userRepository,
+            )
+        }
+        initializer {
+            OrderListViewModel(
+                cinemaApplication().container.orderRepository,
+            )
+        }
+        initializer {
+            OrderViewModel(
+                this.createSavedStateHandle(),
+                cinemaApplication().container.orderRepository,
             )
         }
     }

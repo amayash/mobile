@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import com.example.myapplication.database.entities.dao.CinemaDao
 import com.example.myapplication.database.entities.model.Cinema
 import com.example.myapplication.database.entities.model.CinemaWithSessions
-import com.example.myapplication.database.entities.model.SessionFromCinema
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -15,13 +14,14 @@ class OfflineCinemaRepository(private val cinemaDao: CinemaDao) : CinemaReposito
 
     override fun getCinema(uid: Int): Flow<CinemaWithSessions> {
         return flow {
-            val temp = cinemaDao.getByUid(uid)
-            emit(temp.firstNotNullOf {
-                CinemaWithSessions(
-                    cinema = it.key,
-                    sessions = it.value
-                )
-            })
+            cinemaDao.getByUid(uid).collect {
+                emit(it.firstNotNullOf {
+                    CinemaWithSessions(
+                        cinema = it.key,
+                        sessions = it.value
+                    )
+                })
+            }
         }
     }
 

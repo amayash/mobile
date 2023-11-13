@@ -2,9 +2,11 @@ package com.example.myapplication.database
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.compose.ui.graphics.Color
 import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.myapplication.database.entities.dao.CinemaDao
 import com.example.myapplication.database.entities.dao.OrderDao
 import com.example.myapplication.database.entities.dao.OrderSessionCrossRefDao
@@ -23,10 +25,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
 import java.io.ByteArrayOutputStream
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
-import kotlin.random.Random
 
 @Database(
     entities = [Cinema::class, Session::class, Order::class,
@@ -59,10 +57,14 @@ abstract class AppDatabase : RoomDatabase() {
                 userDao.insert(user2)
                 // Cinemas
                 val cinemaDao = database.cinemaDao()
-                val cinema1 = Cinema(1, "a", "Desc1", createColoredImage(android.graphics.Color.BLUE), 2023)
-                val cinema2 = Cinema(2, "b", "Desc2", createColoredImage(android.graphics.Color.GREEN), 2023)
-                val cinema3 = Cinema(3, "c", "Desc3", createColoredImage(android.graphics.Color.RED), 2023)
-                val cinema4 = Cinema(4, "d", "Desc4", createColoredImage(android.graphics.Color.CYAN), 2023)
+                val cinema1 =
+                    Cinema(1, "a", "Desc1", createColoredImage(android.graphics.Color.BLUE), 2023)
+                val cinema2 =
+                    Cinema(2, "b", "Desc2", createColoredImage(android.graphics.Color.GREEN), 2023)
+                val cinema3 =
+                    Cinema(3, "c", "Desc3", createColoredImage(android.graphics.Color.RED), 2023)
+                val cinema4 =
+                    Cinema(4, "d", "Desc4", createColoredImage(android.graphics.Color.CYAN), 2023)
                 cinemaDao.insert(cinema1)
                 cinemaDao.insert(cinema2)
                 cinemaDao.insert(cinema3)
@@ -102,12 +104,18 @@ abstract class AppDatabase : RoomDatabase() {
                 // OrderSessionCrossRef для связи заказов с сеансами
                 val orderSessionCrossRefDao = database.orderSessionCrossRefDao()
                 if (session1.uid != null && session2.uid != null && session3.uid != null) {
-                    val orderSessionCrossRef1 = OrderSessionCrossRef(order1.uid, session3.uid, 150.0, 5)
-                    val orderSessionCrossRef2 = OrderSessionCrossRef(order1.uid, session2.uid, 300.0, 10)
-                    val orderSessionCrossRef3 = OrderSessionCrossRef(order2.uid, session2.uid, 350.0, 6)
-                    val orderSessionCrossRef4 = OrderSessionCrossRef(order3.uid, session1.uid, 250.0, 10)
-                    val orderSessionCrossRef5 = OrderSessionCrossRef(order3.uid, session3.uid, 150.0, 16)
-                    val orderSessionCrossRef6 = OrderSessionCrossRef(order4.uid, session3.uid, 150.0, 2)
+                    val orderSessionCrossRef1 =
+                        OrderSessionCrossRef(order1.uid, session3.uid, 150.0, 5)
+                    val orderSessionCrossRef2 =
+                        OrderSessionCrossRef(order1.uid, session2.uid, 300.0, 10)
+                    val orderSessionCrossRef3 =
+                        OrderSessionCrossRef(order2.uid, session2.uid, 350.0, 6)
+                    val orderSessionCrossRef4 =
+                        OrderSessionCrossRef(order3.uid, session1.uid, 250.0, 10)
+                    val orderSessionCrossRef5 =
+                        OrderSessionCrossRef(order3.uid, session3.uid, 150.0, 16)
+                    val orderSessionCrossRef6 =
+                        OrderSessionCrossRef(order4.uid, session3.uid, 150.0, 2)
                     orderSessionCrossRefDao.insert(orderSessionCrossRef1)
                     orderSessionCrossRefDao.insert(orderSessionCrossRef2)
                     orderSessionCrossRefDao.insert(orderSessionCrossRef3)

@@ -1,7 +1,6 @@
 package com.example.myapplication.database
 
 import android.content.Context
-import com.example.myapplication.database.AppDatabase
 import com.example.myapplication.database.entities.repository.CinemaRepository
 import com.example.myapplication.database.entities.repository.OfflineCinemaRepository
 import com.example.myapplication.database.entities.repository.OfflineOrderRepository

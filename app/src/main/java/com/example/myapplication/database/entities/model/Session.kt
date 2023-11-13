@@ -13,7 +13,7 @@ import org.threeten.bp.LocalDateTime
             entity = Cinema::class,
             parentColumns = ["uid"],
             childColumns = ["cinema_id"],
-            onDelete = ForeignKey.RESTRICT,
+            onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.RESTRICT
         )
     ]
@@ -48,6 +48,7 @@ data class Session(
             )
         }
     }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

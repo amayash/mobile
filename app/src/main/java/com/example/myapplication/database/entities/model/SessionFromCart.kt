@@ -19,5 +19,5 @@ data class SessionFromCart(
         parentColumn = "cinema_id",
         entity = Cinema::class,
         entityColumn = "uid"
-    )    val cinema: Cinema
+    ) val cinema: Cinema
 )

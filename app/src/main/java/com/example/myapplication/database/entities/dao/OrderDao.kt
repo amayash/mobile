@@ -14,15 +14,17 @@ interface OrderDao {
     @Query("select * from orders where user_id = :userId")
     fun getAll(userId: Int?): Flow<List<Order>>
 
-    @Query("SELECT o.*, s.*, os.count, os.frozen_price " +
-            "FROM orders AS o " +
-            "JOIN orders_sessions AS os ON os.order_id = o.uid " +
-            "JOIN sessions AS s ON s.uid = os.session_id " +
-            "WHERE o.uid = :orderId")
-    fun getByUid(orderId: Int?): List<SessionFromOrder>
+    @Query(
+        "SELECT o.*, s.*, os.count, os.frozen_price " +
+                "FROM orders AS o " +
+                "JOIN orders_sessions AS os ON os.order_id = o.uid " +
+                "JOIN sessions AS s ON s.uid = os.session_id " +
+                "WHERE o.uid = :orderId"
+    )
+    fun getByUid(orderId: Int?): Flow<List<SessionFromOrder>>
 
     @Insert
-    suspend fun insert(order: Order) : Long
+    suspend fun insert(order: Order): Long
 
     @Update
     suspend fun update(order: Order)
