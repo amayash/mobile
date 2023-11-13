@@ -17,11 +17,11 @@ class SessionEditViewModel(
     savedStateHandle: SavedStateHandle,
     private val sessionRepository: SessionRepository
 ) : ViewModel() {
-
     var sessionUiState by mutableStateOf(SessionUiState())
         private set
 
     private val sessionUid: Int = checkNotNull(savedStateHandle["id"])
+    private val cinemaUid: Int = checkNotNull(savedStateHandle["cinemaId"])
 
     init {
         viewModelScope.launch {
@@ -43,22 +43,30 @@ class SessionEditViewModel(
 
     suspend fun saveSession() {
         if (validateInput()) {
-            if (sessionUid > 0) {
-                sessionRepository.updateSession(sessionUiState.sessionDetails.toSession(sessionUid))
-            } else {
-                sessionRepository.insertSession(sessionUiState.sessionDetails.toSession())
-            }
+            if (cinemaUid > 0)
+                if (sessionUid > 0) {
+                    sessionRepository.updateSession(sessionUiState.sessionDetails
+                        .toSession(uid = sessionUid, cinemaUid = cinemaUid))
+                } else {
+                    sessionRepository.insertSession(sessionUiState.sessionDetails.toSession(cinemaUid = cinemaUid))
+                }
         }
     }
 
     private fun validateInput(uiState: SessionDetails = sessionUiState.sessionDetails): Boolean {
         return with(uiState) {
-            dateTime.toString().isNotBlank()
-                    && price > 0
+            dateTime != LocalDateTime.MIN
+                    && isValidDouble(price)
                     && maxCount > 0
-                    && cinemaId > 0
+                    && cinemaUid > 0
         }
     }
+}
+
+val regex = """^-?\d+(.\d+)?+(,\d+)?$""".toRegex()
+
+fun isValidDouble(input: String): Boolean {
+    return regex.matches(input)
 }
 
 data class SessionUiState(
@@ -69,23 +77,23 @@ data class SessionUiState(
 data class SessionDetails(
     val uid: Int = 0,
     val dateTime: LocalDateTime = LocalDateTime.MIN,
-    val price: Double = 0.0,
+    val price: String = "0",
     val maxCount: Int = 0,
     val cinemaId: Int = 0
 )
 
-fun SessionDetails.toSession(uid: Int = 0): Session = Session(
+fun SessionDetails.toSession(uid: Int = 0, cinemaUid: Int = 0): Session = Session(
     uid = uid,
     dateTime = dateTime,
-    price = price,
+    price = price.toDoubleOrNull() ?: 0.0,
     maxCount = maxCount,
-    cinemaId = cinemaId
+    cinemaId = cinemaUid
 )
 
 fun Session.toDetails(): SessionDetails = SessionDetails(
     uid = uid,
     dateTime = dateTime,
-    price = price,
+    price = price.toString(),
     maxCount = maxCount,
     cinemaId = cinemaId
 )

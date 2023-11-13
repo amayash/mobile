@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import com.example.myapplication.composeui.navigation.MainNavbar
 import com.example.myapplication.datastore.DataStoreManager
 import com.example.myapplication.ui.theme.PmudemoTheme
-import com.jakewharton.threetenabp.AndroidThreeTen
+//import com.jakewharton.threetenabp.AndroidThreeTen
 
 class MainComposeActivity : ComponentActivity() {
     private val dataStoreManager = DataStoreManager(this)
@@ -20,7 +20,7 @@ class MainComposeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         application.deleteDatabase("pmy-db")
-        AndroidThreeTen.init(this)
+        //AndroidThreeTen.init(this)
         setContent {
             PmudemoTheme(darkTheme = isDarkTheme.value) {
                 LaunchedEffect(key1 = true) {

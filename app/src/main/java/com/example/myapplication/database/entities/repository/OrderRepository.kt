@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface OrderRepository {
     fun getAllOrders(userId: Int?): Flow<List<Order>>
     fun getOrder(orderId: Int?): List<SessionFromOrder>
-    suspend fun insertOrder(order: Order)
+    suspend fun insertOrder(order: Order) : Long
     suspend fun updateOrder(order: Order)
     suspend fun deleteOrder(order: Order)
 }

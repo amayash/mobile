@@ -11,7 +11,7 @@ class OfflineOrderRepository(private val orderDao: OrderDao) : OrderRepository {
 
     override fun getOrder(orderId: Int?): List<SessionFromOrder> = orderDao.getByUid(orderId)
 
-    override suspend fun insertOrder(order: Order) = orderDao.insert(order)
+    override suspend fun insertOrder(order: Order) : Long = orderDao.insert(order)
 
     override suspend fun updateOrder(order: Order) = orderDao.update(order)
 

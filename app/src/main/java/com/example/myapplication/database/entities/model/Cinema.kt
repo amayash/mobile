@@ -42,7 +42,6 @@ data class Cinema(
         if (uid != other.uid) return false
         if (name != other.name) return false
         if (description != other.description) return false
-        if (!image.contentEquals(other.image)) return false
         if (year != other.year) return false
         return true
     }
@@ -51,7 +50,6 @@ data class Cinema(
         var result = uid
         result = 31 * result + name.hashCode()
         result = 31 * result + description.hashCode()
-        result = 31 * result + image.hashCode()
         result = 31 * result + year.hashCode()
         return result
     }

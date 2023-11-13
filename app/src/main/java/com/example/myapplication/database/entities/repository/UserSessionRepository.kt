@@ -8,4 +8,5 @@ interface UserSessionRepository {
     suspend fun insertUserSession(userSessionCrossRef: UserSessionCrossRef)
     suspend fun updateUserSession(userSessionCrossRef: UserSessionCrossRef)
     suspend fun deleteUserSession(userSessionCrossRef: UserSessionCrossRef)
+    suspend fun deleteUserSessions(userId: Int)
 }

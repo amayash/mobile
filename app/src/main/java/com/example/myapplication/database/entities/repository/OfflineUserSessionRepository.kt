@@ -10,4 +10,6 @@ class OfflineUserSessionRepository(private val userSessionDao: UserSessionCrossR
     override suspend fun updateUserSession(userSessionCrossRef: UserSessionCrossRef) = userSessionDao.update(userSessionCrossRef)
 
     override suspend fun deleteUserSession(userSessionCrossRef: UserSessionCrossRef) = userSessionDao.delete(userSessionCrossRef)
+
+    override suspend fun deleteUserSessions(userId: Int) = userSessionDao.deleteByUserUid(userId)
 }

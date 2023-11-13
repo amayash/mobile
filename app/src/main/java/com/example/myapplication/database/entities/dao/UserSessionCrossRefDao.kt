@@ -18,4 +18,7 @@ interface UserSessionCrossRefDao {
 
     @Delete
     suspend fun delete(userSessionCrossRef: UserSessionCrossRef)
+
+    @Query("DELETE FROM users_sessions where users_sessions.user_id = :userId")
+    suspend fun deleteByUserUid(userId: Int)
 }

@@ -22,7 +22,7 @@ interface OrderDao {
     fun getByUid(orderId: Int?): List<SessionFromOrder>
 
     @Insert
-    suspend fun insert(order: Order)
+    suspend fun insert(order: Order) : Long
 
     @Update
     suspend fun update(order: Order)

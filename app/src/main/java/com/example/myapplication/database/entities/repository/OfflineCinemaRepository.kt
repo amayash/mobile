@@ -1,17 +1,29 @@
 package com.example.myapplication.database.entities.repository
 
+import androidx.paging.PagingSource
 import com.example.myapplication.database.entities.dao.CinemaDao
 import com.example.myapplication.database.entities.model.Cinema
+import com.example.myapplication.database.entities.model.CinemaWithSessions
 import com.example.myapplication.database.entities.model.SessionFromCinema
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class OfflineCinemaRepository(private val cinemaDao: CinemaDao) : CinemaRepository {
     override fun getAllCinemas(): Flow<List<Cinema>> = cinemaDao.getAll()
-    override fun getCinemaWithSessions(uid: Int): Flow<Map<Cinema, List<SessionFromCinema>>?> {
-        TODO("Not yet implemented")
-    }
 
-    override fun getCinema(uid: Int):  Flow<Map<Cinema, List<SessionFromCinema>>?> = cinemaDao.getByUid(uid)
+    override fun getAllCinemasPaged(): PagingSource<Int, Cinema> = cinemaDao.getAllCinemasPaged()
+
+    override fun getCinema(uid: Int): Flow<CinemaWithSessions> {
+        return flow {
+            val temp = cinemaDao.getByUid(uid)
+            emit(temp.firstNotNullOf {
+                CinemaWithSessions(
+                    cinema = it.key,
+                    sessions = it.value
+                )
+            })
+        }
+    }
 
     override suspend fun insertCinema(cinema: Cinema) = cinemaDao.insert(cinema)
 

@@ -177,7 +177,7 @@ fun Navhost(
     ) {
         composable(Screen.CinemaList.route) { CinemaList(navController) }
         composable(Screen.OrderList.route) { OrderList(navController, 1) }
-        composable(Screen.Cart.route) { Cart(1) }
+        composable(Screen.Cart.route) { Cart() }
         composable(Screen.UserProfile.route) { UserProfile(isDarkTheme, dataStore) }
         composable(
             Screen.CinemaEdit.route,
@@ -187,7 +187,8 @@ fun Navhost(
         }
         composable(
             Screen.SessionEdit.route,
-            arguments = listOf(navArgument("id") { type = NavType.IntType })
+            arguments = listOf(navArgument("id") { type = NavType.IntType },
+                navArgument("cinemaId") { type = NavType.IntType })
         ) {
             SessionEdit(navController)
         }

@@ -1,5 +1,6 @@
 package com.example.myapplication.database.entities.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -14,13 +15,16 @@ interface CinemaDao {
     @Query("select * from cinemas order by name")
     fun getAll(): Flow<List<Cinema>>
 
-    @Query("SELECT c.*, s.date_time, s.price, s.max_count-sum(os.count) as available_count " +
+    @Query("select * from cinemas order by name")
+    fun getAllCinemasPaged(): PagingSource<Int, Cinema>
+
+    @Query("SELECT c.*, s.uid as session_uid, s.date_time, s.price, s.max_count-IFNULL(SUM(os.count), 0) as available_count " +
             "FROM cinemas AS c " +
-            "JOIN sessions AS s ON s.cinema_id = c.uid " +
-            "JOIN orders_sessions AS os ON os.session_id = s.uid " +
+            "LEFT JOIN sessions AS s ON s.cinema_id = c.uid " +
+            "LEFT JOIN orders_sessions AS os ON os.session_id = s.uid " +
             "WHERE c.uid = :cinemaId " +
-            "GROUP BY os.session_id")
-    fun getByUid(cinemaId: Int?):  Flow<Map<Cinema, List<SessionFromCinema>>?>
+            "GROUP BY session_uid")
+    suspend fun getByUid(cinemaId: Int?): Map<Cinema, List<SessionFromCinema>>
 
     @Insert
     suspend fun insert(cinema: Cinema)

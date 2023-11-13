@@ -17,4 +17,6 @@
     <string name="Cinema_empty_description">Записи о фильмах отсутствуют</string>
     <string name="Session_empty_description">Записи о сеансах отсутствуют</string>
     <string name="session_cinema_not_select">Фильм не указан</string>
+    <string name="size">Размер загруженного изображения: %1$dx%2$d</string>
+    <string name="not_uploaded">Загрузите изображение</string>
 </resources>

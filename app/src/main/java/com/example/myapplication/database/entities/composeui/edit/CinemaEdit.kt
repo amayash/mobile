@@ -1,19 +1,19 @@
 package com.example.myapplication.database.entities.composeui.edit
 
 import android.content.res.Configuration
-import android.util.Base64
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,17 +25,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.myapplication.R
 import com.example.myapplication.database.entities.composeui.AppViewModelProvider
-import com.example.myapplication.database.entities.model.Cinema
-import com.example.myapplication.database.entities.model.SessionFromCinema
 import com.example.myapplication.ui.theme.PmudemoTheme
 import kotlinx.coroutines.launch
 
 @Composable
 fun CinemaEdit(
-    navController: NavController, 
-    viewModel: CinemaEditViewModel = viewModel(factory = AppViewModelProvider.Factory), 
-    ) {
+    navController: NavController,
+    viewModel: CinemaEditViewModel = viewModel(factory = AppViewModelProvider.Factory),
+) {
     val coroutineScope = rememberCoroutineScope()
+
     CinemaEdit(
         cinemaUiState = viewModel.cinemaUiState,
         onClick = {
@@ -73,7 +72,7 @@ private fun CinemaEdit(
             label = { Text(stringResource(id = R.string.Cinema_description)) },
             singleLine = true
         )
-        TextField(
+        OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = cinemaUiState.cinemaDetails.year.toString(),
             onValueChange = { newValue ->
@@ -85,17 +84,21 @@ private fun CinemaEdit(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             visualTransformation = VisualTransformation.None // Отключает маскировку
         )
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = cinemaUiState.cinemaDetails.image?.toString(Charsets.ISO_8859_1) ?: "",
-            onValueChange = { newValue ->
-                val byteArrayImage = newValue.toByteArray(Charsets.ISO_8859_1)
-                onUpdate(cinemaUiState.cinemaDetails.copy(image = byteArrayImage))
-            },
-            label = { Text(stringResource(id = R.string.Cinema_image)) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-        )
+        if (cinemaUiState.cinemaDetails.image != null)
+            ImageUploader(
+                bitmap = BitmapFactory.decodeByteArray(
+                    cinemaUiState.cinemaDetails.image,
+                    0,
+                    cinemaUiState.cinemaDetails.image.size
+                ),
+                onResult = { byteArray: ByteArray? ->
+                    onUpdate(
+                        cinemaUiState.cinemaDetails.copy(
+                            image = byteArray
+                        )
+                    )
+                }
+            )
         Button(
             onClick = onClick,
             enabled = cinemaUiState.isEntryValid,
@@ -106,6 +109,7 @@ private fun CinemaEdit(
         }
     }
 }
+
 
 @Preview(name = "Light Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)

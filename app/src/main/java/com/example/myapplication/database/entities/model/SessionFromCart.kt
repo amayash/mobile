@@ -6,7 +6,7 @@ import org.threeten.bp.LocalDateTime
 
 data class SessionFromCart(
     @ColumnInfo(name = "uid")
-    val uid: Int?,
+    val uid: Int = 0,
     @ColumnInfo(name = "date_time")
     val dateTime: LocalDateTime,
     val price: Double,
@@ -14,7 +14,7 @@ data class SessionFromCart(
     val availableCount: Int,
     val count: Int,
     @ColumnInfo(name = "cinema_id")
-    val cinemaId: Int?,
+    val cinemaId: Int = 0,
     @Relation(
         parentColumn = "cinema_id",
         entity = Cinema::class,

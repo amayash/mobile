@@ -22,7 +22,7 @@ enum class Screen(
         "Cinema-edit/{id}", R.string.Cinema_view_title, showInBottomBar = false
     ),
     SessionEdit(
-        "Session-edit/{id}", R.string.Session_view_title, showInBottomBar = false
+        "Session-edit/{id}/{cinemaId}", R.string.Session_view_title, showInBottomBar = false
     ),
     CinemaView(
         "Cinema-view/{id}", R.string.Cinema_view_title, showInBottomBar = false

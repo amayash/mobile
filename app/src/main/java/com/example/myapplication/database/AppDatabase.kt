@@ -2,7 +2,7 @@ package com.example.myapplication.database
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Color
+import androidx.compose.ui.graphics.Color
 import androidx.room.Database
 import androidx.room.TypeConverters
 import com.example.myapplication.database.entities.dao.CinemaDao
@@ -26,6 +26,7 @@ import java.io.ByteArrayOutputStream
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import kotlin.random.Random
 
 @Database(
     entities = [Cinema::class, Session::class, Order::class,
@@ -58,12 +59,26 @@ abstract class AppDatabase : RoomDatabase() {
                 userDao.insert(user2)
                 // Cinemas
                 val cinemaDao = database.cinemaDao()
-                val cinema1 = Cinema(1, "BLUE 1", "Desc1", createColoredImage(Color.BLUE), 2023)
-                val cinema2 = Cinema(2, "GREEN 2", "Desc2", createColoredImage(Color.GREEN), 2023)
-                val cinema3 = Cinema(3, "RED 3", "Desc3", createColoredImage(Color.RED), 2023)
+                val cinema1 = Cinema(1, "a", "Desc1", createColoredImage(android.graphics.Color.BLUE), 2023)
+                val cinema2 = Cinema(2, "b", "Desc2", createColoredImage(android.graphics.Color.GREEN), 2023)
+                val cinema3 = Cinema(3, "c", "Desc3", createColoredImage(android.graphics.Color.RED), 2023)
+                val cinema4 = Cinema(4, "d", "Desc4", createColoredImage(android.graphics.Color.CYAN), 2023)
                 cinemaDao.insert(cinema1)
                 cinemaDao.insert(cinema2)
                 cinemaDao.insert(cinema3)
+                cinemaDao.insert(cinema4)
+
+                for (i in 5..20) {
+                    val cinema = Cinema(
+                        uid = i,
+                        name = generateCinemaName(i),
+                        description = "Description $i",
+                        image = createColoredImage(getRandomColorInt()),
+                        year = 2023
+                    )
+                    cinemaDao.insert(cinema)
+                }
+
                 // Orders
                 val orderDao = database.orderDao()
                 val order1 = Order(1, 1)
@@ -140,6 +155,26 @@ abstract class AppDatabase : RoomDatabase() {
             bmp.compress(Bitmap.CompressFormat.PNG, 100, stream)
 
             return stream.toByteArray()
+        }
+
+        fun getRandomColorInt(): Int {
+            val red = (0..255).random()
+            val green = (0..255).random()
+            val blue = (0..255).random()
+            return (0xFF shl 24) or (red shl 16) or (green shl 8) or blue
+        }
+
+        fun generateCinemaName(index: Int): String {
+            val base = 'a'.toInt()
+            val alphabetSize = 26
+            val sb = StringBuilder()
+            var remainder = index
+            do {
+                val letter = (remainder % alphabetSize + base).toChar()
+                sb.insert(0, letter)
+                remainder /= alphabetSize
+            } while (remainder > 0)
+            return sb.toString()
         }
     }
 }

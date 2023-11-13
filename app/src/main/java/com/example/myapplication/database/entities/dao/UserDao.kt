@@ -3,6 +3,7 @@ package com.example.myapplication.database.entities.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.myapplication.database.entities.model.SessionFromCart
@@ -15,12 +16,12 @@ interface UserDao {
     fun getAll(): Flow<List<User>>
 
     @Query(
-        "SELECT sessions.*, sessions.max_count-sum(orders_sessions.count) as available_count, " +
+        "SELECT sessions.*, sessions.max_count-IFNULL(SUM(orders_sessions.count), 0) as available_count, " +
                 "users_sessions.count FROM sessions " +
                 "join users_sessions on sessions.uid = users_sessions.session_id " +
-                "join orders_sessions on sessions.uid = orders_sessions.session_id " +
+                "left join orders_sessions on sessions.uid = orders_sessions.session_id " +
                 "where users_sessions.user_id = :userId " +
-                "GROUP BY orders_sessions.session_id "
+                "GROUP BY users_sessions.session_id "
     )
     fun getCartByUid(userId: Int): Flow<List<SessionFromCart>>
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.database.entities.model.Cinema
+import com.example.myapplication.database.entities.model.CinemaWithSessions
 import com.example.myapplication.database.entities.model.SessionFromCinema
 import com.example.myapplication.database.entities.repository.CinemaRepository
 import kotlinx.coroutines.launch
@@ -54,7 +55,8 @@ class CinemaEditViewModel(
         return with(uiState) {
             name.isNotBlank()
                     && description.isNotBlank()
-                    && year.toString().isNotBlank()
+                    && year >= 1900
+                    && year <= 2100
         }
     }
 }
@@ -80,10 +82,9 @@ fun CinemaDetails.toCinema(uid: Int = 0): Cinema = Cinema(
     year = year
 )
 
-fun Map<Cinema, List<SessionFromCinema>>.toDetails(): CinemaDetails {
-    val cinemaEntry = entries.first()
-    val cinema = cinemaEntry.key
-    val sessions = cinemaEntry.value
+fun CinemaWithSessions.toDetails(): CinemaDetails {
+    val cinema = this.cinema
+    val sessions = this.sessions
 
     return CinemaDetails(
         name = cinema.name,
@@ -94,7 +95,7 @@ fun Map<Cinema, List<SessionFromCinema>>.toDetails(): CinemaDetails {
     )
 }
 
-fun Map<Cinema, List<SessionFromCinema>>.toUiState(isEntryValid: Boolean = false): CinemaUiState = CinemaUiState(
+fun CinemaWithSessions.toUiState(isEntryValid: Boolean = false): CinemaUiState = CinemaUiState(
     cinemaDetails = this.toDetails(),
     isEntryValid = isEntryValid
 )

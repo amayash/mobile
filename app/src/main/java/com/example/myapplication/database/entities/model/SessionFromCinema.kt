@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import org.threeten.bp.LocalDateTime
 
 data class SessionFromCinema (
-    @ColumnInfo(name = "uid")
+    @ColumnInfo(name = "session_uid")
     val uid: Int,
     @ColumnInfo(name = "date_time")
     val dateTime: LocalDateTime,

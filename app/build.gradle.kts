@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.myapplication"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -31,6 +31,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -51,9 +52,15 @@ android {
 }
 
 dependencies {
-    implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
+    implementation("org.threeten:threetenbp:1.5.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.6")
+
+    // Pagination
+    val paging_version = "3.2.0-rc01"
+    implementation("androidx.paging:paging-runtime:$paging_version")
+    implementation("androidx.paging:paging-compose:$paging_version")
 
     // Core
     implementation("androidx.core:core-ktx:1.9.0")
