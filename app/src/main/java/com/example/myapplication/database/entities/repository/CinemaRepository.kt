@@ -1,10 +1,8 @@
 package com.example.myapplication.database.entities.repository
 
 import androidx.paging.PagingSource
-import androidx.room.Query
 import com.example.myapplication.database.entities.model.Cinema
 import com.example.myapplication.database.entities.model.CinemaWithSessions
-import com.example.myapplication.database.entities.model.SessionFromCinema
 import kotlinx.coroutines.flow.Flow
 
 interface CinemaRepository {

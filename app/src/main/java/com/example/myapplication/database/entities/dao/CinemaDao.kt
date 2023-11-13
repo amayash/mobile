@@ -18,13 +18,15 @@ interface CinemaDao {
     @Query("select * from cinemas order by name")
     fun getAllCinemasPaged(): PagingSource<Int, Cinema>
 
-    @Query("SELECT c.*, s.uid as session_uid, s.date_time, s.price, s.max_count-IFNULL(SUM(os.count), 0) as available_count " +
-            "FROM cinemas AS c " +
-            "LEFT JOIN sessions AS s ON s.cinema_id = c.uid " +
-            "LEFT JOIN orders_sessions AS os ON os.session_id = s.uid " +
-            "WHERE c.uid = :cinemaId " +
-            "GROUP BY session_uid")
-    suspend fun getByUid(cinemaId: Int?): Map<Cinema, List<SessionFromCinema>>
+    @Query(
+        "SELECT c.*, s.uid as session_uid, s.date_time, s.price, s.max_count-IFNULL(SUM(os.count), 0) as available_count " +
+                "FROM cinemas AS c " +
+                "LEFT JOIN sessions AS s ON s.cinema_id = c.uid " +
+                "LEFT JOIN orders_sessions AS os ON os.session_id = s.uid " +
+                "WHERE c.uid = :cinemaId " +
+                "GROUP BY session_uid"
+    )
+    fun getByUid(cinemaId: Int?): Flow<Map<Cinema, List<SessionFromCinema>>>
 
     @Insert
     suspend fun insert(cinema: Cinema)

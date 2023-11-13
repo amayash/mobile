@@ -45,10 +45,16 @@ class SessionEditViewModel(
         if (validateInput()) {
             if (cinemaUid > 0)
                 if (sessionUid > 0) {
-                    sessionRepository.updateSession(sessionUiState.sessionDetails
-                        .toSession(uid = sessionUid, cinemaUid = cinemaUid))
+                    sessionRepository.updateSession(
+                        sessionUiState.sessionDetails
+                            .toSession(uid = sessionUid, cinemaUid = cinemaUid)
+                    )
                 } else {
-                    sessionRepository.insertSession(sessionUiState.sessionDetails.toSession(cinemaUid = cinemaUid))
+                    sessionRepository.insertSession(
+                        sessionUiState.sessionDetails.toSession(
+                            cinemaUid = cinemaUid
+                        )
+                    )
                 }
         }
     }

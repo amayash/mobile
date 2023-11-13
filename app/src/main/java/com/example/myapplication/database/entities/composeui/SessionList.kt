@@ -122,11 +122,6 @@ fun SessionList(
                                 onClick = {
                                     coroutineScope.launch {
                                         viewModel.deleteSession(session = session)
-                                        navController.popBackStack()
-                                        navController
-                                            .navigate(Screen.CinemaView.route
-                                                .replace("{id}",
-                                                    cinemaWithSessions.cinema.uid.toString()))
                                     }
                                 },
                             ) {
