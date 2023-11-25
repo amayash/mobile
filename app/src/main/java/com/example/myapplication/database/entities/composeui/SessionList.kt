@@ -107,7 +107,8 @@ fun SessionList(
                             IconButton(
                                 onClick = {
                                     coroutineScope.launch {
-                                        viewModel.addSessionInCart(sessionId = session.uid)
+                                        if (session.availableCount != 0)
+                                            viewModel.addSessionInCart(sessionId = session.uid)
                                     }
                                 },
                             ) {

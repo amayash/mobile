@@ -276,7 +276,9 @@ private fun SessionListItem(
                         )
 
                         IconButton(
-                            onClick = { onChangeCount(session, 1, ++currentCount) }
+                            onClick = {
+                                onChangeCount(session, 1, if (currentCount != session.availableCount) ++currentCount else currentCount)
+                            }
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
