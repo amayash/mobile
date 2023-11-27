@@ -20,6 +20,8 @@ import com.example.myapplication.database.entities.model.OrderSessionCrossRef
 import com.example.myapplication.database.entities.model.Session
 import com.example.myapplication.database.entities.model.User
 import com.example.myapplication.database.entities.model.UserSessionCrossRef
+import com.example.myapplication.database.remotekeys.dao.RemoteKeysDao
+import com.example.myapplication.database.remotekeys.model.RemoteKeys
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,8 +29,15 @@ import org.threeten.bp.LocalDateTime
 import java.io.ByteArrayOutputStream
 
 @Database(
-    entities = [Cinema::class, Session::class, Order::class,
-        OrderSessionCrossRef::class, User::class, UserSessionCrossRef::class],
+    entities = [
+        Cinema::class,
+        Session::class,
+        Order::class,
+        OrderSessionCrossRef::class,
+        User::class,
+        UserSessionCrossRef::class,
+        RemoteKeys::class
+    ],
     version = 1,
     exportSchema = false
 )
@@ -40,6 +49,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun orderSessionCrossRefDao(): OrderSessionCrossRefDao
     abstract fun userDao(): UserDao
     abstract fun userSessionCrossRefDao(): UserSessionCrossRefDao
+    abstract fun remoteKeysDao(): RemoteKeysDao
 
     companion object {
         private const val DB_NAME: String = "pmy-db"
@@ -51,11 +61,9 @@ abstract class AppDatabase : RoomDatabase() {
             INSTANCE?.let { database ->
                 // Users
                 val userDao = database.userDao()
-                val user1 = User(1, "Login", "password")
-                val user2 = User(2, "Login123", "password123")
+                val user1 = User(1, "login", "password")
                 userDao.insert(user1)
-                userDao.insert(user2)
-                // Cinemas
+                /*// Cinemas
                 val cinemaDao = database.cinemaDao()
                 val cinema1 =
                     Cinema(1, "a", "Desc1", createColoredImage(android.graphics.Color.BLUE), 2023)
@@ -128,7 +136,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val userSessionCrossRef1 = UserSessionCrossRef(1, 1, 5)
                 val userSessionCrossRef2 = UserSessionCrossRef(1, 3, 15)
                 userSessionCrossRefDao.insert(userSessionCrossRef1)
-                userSessionCrossRefDao.insert(userSessionCrossRef2)
+                userSessionCrossRefDao.insert(userSessionCrossRef2)*/
             }
         }
 
@@ -165,15 +173,15 @@ abstract class AppDatabase : RoomDatabase() {
             return stream.toByteArray()
         }
 
-        fun getRandomColorInt(): Int {
+        private fun getRandomColorInt(): Int {
             val red = (0..255).random()
             val green = (0..255).random()
             val blue = (0..255).random()
             return (0xFF shl 24) or (red shl 16) or (green shl 8) or blue
         }
 
-        fun generateCinemaName(index: Int): String {
-            val base = 'a'.toInt()
+        private fun generateCinemaName(index: Int): String {
+            val base = 'a'.code
             val alphabetSize = 26
             val sb = StringBuilder()
             var remainder = index

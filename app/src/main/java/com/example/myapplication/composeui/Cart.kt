@@ -66,7 +66,7 @@ fun Cart(
     viewModel: CartViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val cartUiState by viewModel.cartUiState.collectAsState()
+    val cartUiState = viewModel.cartUiState
 
     Cart(
         cartUiState = cartUiState,

@@ -15,29 +15,9 @@ import kotlinx.coroutines.flow.emptyFlow
 class CinemaListViewModel(
     private val cinemaRepository: CinemaRepository
 ) : ViewModel() {
-    private val pagingConfig = PagingConfig(
-        pageSize = 4,
-        prefetchDistance = 4
-    )
-
-    var cinemaPagerState by mutableStateOf(CinemaPagerState())
-        private set
-
-    fun findCinemas() {
-        val pager = Pager(
-            config = pagingConfig,
-            pagingSourceFactory = {
-                cinemaRepository.getAllCinemasPaged()
-            }
-        )
-        cinemaPagerState = CinemaPagerState(pager.flow)
-    }
+    val cinemaListUiState: Flow<PagingData<Cinema>> = cinemaRepository.getAllCinemas()
 
     suspend fun deleteCinema(cinema: Cinema) {
         cinemaRepository.deleteCinema(cinema)
     }
 }
-
-data class CinemaPagerState(
-    val cinemaPagingData: Flow<PagingData<Cinema>> = emptyFlow()
-)

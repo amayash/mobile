@@ -46,17 +46,7 @@ fun CinemaList(
     viewModel: CinemaListViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
-
-    val cinemaPagingItems = viewModel.cinemaPagerState.cinemaPagingData.collectAsLazyPagingItems()
-
-    fun findCinemas() {
-        coroutineScope.launch {
-            viewModel.findCinemas()
-        }
-    }
-    LaunchedEffect(1) {
-        findCinemas()
-    }
+    val cinemaPagingItems = viewModel.cinemaListUiState.collectAsLazyPagingItems()
 
     Scaffold(
         topBar = {},
@@ -132,7 +122,6 @@ private fun CinemaList(
                 }
             }
         }
-
     }
 }
 

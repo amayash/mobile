@@ -27,8 +27,6 @@ class CinemaEditViewModel(
         viewModelScope.launch {
             if (cinemaUid > 0) {
                 cinemaUiState = cinemaRepository.getCinema(cinemaUid)
-                    .filterNotNull()
-                    .first()
                     .toUiState(true)
             }
         }

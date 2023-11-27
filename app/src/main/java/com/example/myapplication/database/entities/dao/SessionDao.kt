@@ -11,14 +11,17 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SessionDao {
     @Query("select * from sessions where sessions.uid = :uid")
-    fun getByUid(uid: Int): Flow<Session>
+    suspend fun getByUid(uid: Int): Session
 
     @Insert
-    suspend fun insert(session: Session)
+    suspend fun insert(vararg session: Session)
 
     @Update
     suspend fun update(session: Session)
 
     @Delete
     suspend fun delete(session: Session)
+
+    @Query("DELETE FROM sessions")
+    suspend fun deleteAll()
 }

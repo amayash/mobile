@@ -12,6 +12,8 @@ data class SessionFromCinema(
     val price: Double,
     @ColumnInfo(name = "available_count")
     val availableCount: Int,
+    @ColumnInfo(name = "cinema_id")
+    val cinemaId: Int,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -22,6 +24,7 @@ data class SessionFromCinema(
         if (dateFormatter.format(dateTime) != dateFormatter.format(other.dateTime)) return false
         if (price != other.price) return false
         if (availableCount != other.availableCount) return false
+        if (cinemaId != other.cinemaId) return false
         return true
     }
 
@@ -30,6 +33,15 @@ data class SessionFromCinema(
         result = 31 * result + dateTime.hashCode()
         result = 31 * result + price.hashCode()
         result = 31 * result + availableCount.hashCode()
+        result = 31 * result + cinemaId.hashCode()
         return result
     }
 }
+
+fun SessionFromCinema.toSession(): Session = Session (
+    uid,
+    dateTime,
+    price,
+    availableCount,
+    cinemaId
+)

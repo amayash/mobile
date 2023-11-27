@@ -38,7 +38,7 @@ fun CinemaView(
     navController: NavController,
     viewModel: CinemaViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
-    val cinemaUiState by viewModel.cinemaUiState.collectAsState()
+    val cinemaUiState = viewModel.cinemaUiState
 
     Column(
         modifier = Modifier

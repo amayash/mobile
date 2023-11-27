@@ -13,15 +13,12 @@ import com.example.myapplication.composeui.navigation.MainNavbar
 import com.example.myapplication.datastore.DataStoreManager
 import com.example.myapplication.ui.theme.PmudemoTheme
 
-//import com.jakewharton.threetenabp.AndroidThreeTen
-
 class MainComposeActivity : ComponentActivity() {
     private val dataStoreManager = DataStoreManager(this)
     private val isDarkTheme = mutableStateOf(true)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         application.deleteDatabase("pmy-db")
-        //AndroidThreeTen.init(this)
         setContent {
             PmudemoTheme(darkTheme = isDarkTheme.value) {
                 LaunchedEffect(key1 = true) {

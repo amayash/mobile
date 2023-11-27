@@ -22,14 +22,17 @@ interface UserDao {
                 "where users_sessions.user_id = :userId " +
                 "GROUP BY users_sessions.session_id "
     )
-    fun getCartByUid(userId: Int): Flow<List<SessionFromCart>>
+    suspend fun getCartByUid(userId: Int): List<SessionFromCart>
 
     @Insert
-    suspend fun insert(user: User)
+    suspend fun insert(vararg user: User)
 
     @Update
     suspend fun update(user: User)
 
     @Delete
     suspend fun delete(user: User)
+
+    @Query("DELETE FROM users")
+    suspend fun deleteAll()
 }

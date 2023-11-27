@@ -12,49 +12,49 @@ import com.example.myapplication.database.entities.composeui.edit.SessionEditVie
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
-            CinemaListViewModel(cinemaApplication().container.cinemaRepository)
+            CinemaListViewModel(cinemaApplication().container.cinemaRestRepository)
         }
         initializer {
             CinemaEditViewModel(
                 this.createSavedStateHandle(),
-                cinemaApplication().container.cinemaRepository
+                cinemaApplication().container.cinemaRestRepository
             )
         }
         initializer {
             CinemaViewModel(
                 this.createSavedStateHandle(),
-                cinemaApplication().container.cinemaRepository,
+                cinemaApplication().container.cinemaRestRepository,
             )
         }
         initializer {
             SessionListViewModel(
-                cinemaApplication().container.sessionRepository,
-                cinemaApplication().container.userSessionRepository,
+                cinemaApplication().container.sessionRestRepository,
+                cinemaApplication().container.userSessionRestRepository,
             )
         }
         initializer {
             SessionEditViewModel(
                 this.createSavedStateHandle(),
-                cinemaApplication().container.sessionRepository,
+                cinemaApplication().container.sessionRestRepository,
             )
         }
         initializer {
             CartViewModel(
-                cinemaApplication().container.userSessionRepository,
-                cinemaApplication().container.orderRepository,
+                cinemaApplication().container.userSessionRestRepository,
+                cinemaApplication().container.orderRestRepository,
                 cinemaApplication().container.orderSessionRepository,
-                cinemaApplication().container.userRepository,
+                cinemaApplication().container.userRestRepository,
             )
         }
         initializer {
             OrderListViewModel(
-                cinemaApplication().container.orderRepository,
+                cinemaApplication().container.orderRestRepository,
             )
         }
         initializer {
             OrderViewModel(
                 this.createSavedStateHandle(),
-                cinemaApplication().container.orderRepository,
+                cinemaApplication().container.orderRestRepository,
             )
         }
     }

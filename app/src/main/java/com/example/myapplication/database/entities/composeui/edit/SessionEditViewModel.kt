@@ -27,8 +27,6 @@ class SessionEditViewModel(
         viewModelScope.launch {
             if (sessionUid > 0) {
                 sessionUiState = sessionRepository.getSession(sessionUid)
-                    .filterNotNull()
-                    .first()
                     .toUiState(true)
             }
         }

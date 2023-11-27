@@ -25,6 +25,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.example.myapplication.composeui.navigation.Screen
 import com.example.myapplication.ui.theme.PmudemoTheme
 
@@ -35,14 +38,17 @@ fun OrderList(
     viewModel: OrderListViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val ordersUiState by viewModel.orderListUiState.collectAsState()
+    val ordersUiState = viewModel.orderListUiState.collectAsLazyPagingItems()
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(all = 10.dp)
     ) {
-        items(ordersUiState.orderList) { order ->
-            val orderId = Screen.OrderView.route.replace("{id}", order.uid.toString())
+        items(count = ordersUiState.itemCount,
+            key = ordersUiState.itemKey(),
+            contentType = ordersUiState.itemContentType()) { index ->
+            val order = ordersUiState[index]
+            val orderId = Screen.OrderView.route.replace("{id}", order!!.uid.toString())
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -9,6 +9,15 @@ import com.example.myapplication.database.entities.model.UserSessionCrossRef
 
 @Dao
 interface UserSessionCrossRefDao {
+    @Query(
+        "SELECT s.max_count-IFNULL(SUM(os.count), 0) as available_count " +
+                "FROM sessions AS s " +
+                "LEFT JOIN orders_sessions AS os ON os.session_id = s.uid " +
+                "WHERE s.uid = :sessionId " +
+                "GROUP BY s.uid"
+    )
+    suspend fun getAvailableCountOfSessions(sessionId: Int): Int
+
     @Insert
     suspend fun insert(userSessionCrossRef: UserSessionCrossRef)
 

@@ -1,5 +1,8 @@
 package com.example.myapplication.database.entities.composeui
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.database.AppDataContainer
@@ -16,6 +19,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class CartViewModel(
     private val userSessionRepository: UserSessionRepository,
@@ -24,14 +28,23 @@ class CartViewModel(
     private val userRepository: UserRepository,
 ) : ViewModel() {
     private val userUid: Int = 1
+    var cartUiState by mutableStateOf(CartUiState())
+        private set
 
-    val cartUiState: StateFlow<CartUiState> = userRepository.getCartByUser(userUid).map {
-        CartUiState(it)
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = AppDataContainer.TIMEOUT),
-        initialValue = CartUiState()
-    )
+    init {
+        viewModelScope.launch {
+            if (userUid > 0) {
+                cartUiState = CartUiState(userRepository.getCartByUser(userUid))
+            }
+        }
+    }
+//    val cartUiState: StateFlow<CartUiState> = userRepository.getCartByUser(userUid).map {
+//        CartUiState(it)
+//    }.stateIn(
+//        scope = viewModelScope,
+//        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = AppDataContainer.TIMEOUT),
+//        initialValue = CartUiState()
+//    )
 
     suspend fun addToOrder(userId: Int, sessions: List<SessionFromCart>) {
         if (sessions.isEmpty())

@@ -43,7 +43,7 @@ data class Cinema(
         if (name != other.name) return false
         if (description != other.description) return false
         if (year != other.year) return false
-        return true
+        return image.contentEquals(other.image)
     }
 
     override fun hashCode(): Int {
