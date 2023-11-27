@@ -4,8 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.myapplication.database.AppDataContainer
 import com.example.myapplication.database.entities.model.Order
 import com.example.myapplication.database.entities.model.OrderSessionCrossRef
 import com.example.myapplication.database.entities.model.Session
@@ -15,11 +13,6 @@ import com.example.myapplication.database.entities.repository.OrderRepository
 import com.example.myapplication.database.entities.repository.OrderSessionRepository
 import com.example.myapplication.database.entities.repository.UserRepository
 import com.example.myapplication.database.entities.repository.UserSessionRepository
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 class CartViewModel(
     private val userSessionRepository: UserSessionRepository,
@@ -31,20 +24,10 @@ class CartViewModel(
     var cartUiState by mutableStateOf(CartUiState())
         private set
 
-    init {
-        viewModelScope.launch {
-            if (userUid > 0) {
-                cartUiState = CartUiState(userRepository.getCartByUser(userUid))
-            }
-        }
+    suspend fun refreshState() {
+        val cart = userRepository.getCartByUser(userUid)
+        cartUiState = CartUiState(cart)
     }
-//    val cartUiState: StateFlow<CartUiState> = userRepository.getCartByUser(userUid).map {
-//        CartUiState(it)
-//    }.stateIn(
-//        scope = viewModelScope,
-//        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = AppDataContainer.TIMEOUT),
-//        initialValue = CartUiState()
-//    )
 
     suspend fun addToOrder(userId: Int, sessions: List<SessionFromCart>) {
         if (sessions.isEmpty())
@@ -61,10 +44,12 @@ class CartViewModel(
             )
         }
         userSessionRepository.deleteUserSessions(userId)
+        refreshState()
     }
 
     suspend fun removeFromCart(user: Int, session: Session, count: Int = 1) {
         userSessionRepository.deleteUserSession(UserSessionCrossRef(user, session.uid, count))
+        refreshState()
     }
 
     suspend fun updateFromCart(userId: Int, session: Session, count: Int, availableCount: Int)
@@ -76,6 +61,7 @@ class CartViewModel(
         if (count > availableCount)
             return false
         userSessionRepository.updateUserSession(UserSessionCrossRef(userId, session.uid, count))
+        refreshState()
         return true
     }
 }

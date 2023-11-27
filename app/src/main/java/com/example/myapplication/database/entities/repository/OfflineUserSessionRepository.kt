@@ -5,8 +5,6 @@ import com.example.myapplication.database.entities.model.UserSessionCrossRef
 
 class OfflineUserSessionRepository(private val userSessionDao: UserSessionCrossRefDao) :
     UserSessionRepository {
-    suspend fun getUnavailableCountOfSessions(sessionId: Int): Int =
-        userSessionDao.getAvailableCountOfSessions(sessionId)
     override suspend fun insertUserSession(userSessionCrossRef: UserSessionCrossRef) =
         userSessionDao.insert(userSessionCrossRef)
 
@@ -17,4 +15,6 @@ class OfflineUserSessionRepository(private val userSessionDao: UserSessionCrossR
         userSessionDao.delete(userSessionCrossRef)
 
     override suspend fun deleteUserSessions(userId: Int) = userSessionDao.deleteByUserUid(userId)
+
+    suspend fun deleteSessionsByUid(sessionId: Int) = userSessionDao.deleteBySessionUid(sessionId)
 }

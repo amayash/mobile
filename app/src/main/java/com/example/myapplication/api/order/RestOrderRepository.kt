@@ -6,11 +6,16 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.myapplication.api.MyServerService
+import com.example.myapplication.api.cinema.toCinemaRemote
+import com.example.myapplication.api.session.toSessionFromOrder
 import com.example.myapplication.database.AppContainer
 import com.example.myapplication.database.AppDatabase
 import com.example.myapplication.database.entities.model.Order
+import com.example.myapplication.database.entities.model.OrderSessionCrossRef
 import com.example.myapplication.database.entities.model.SessionFromOrder
+import com.example.myapplication.database.entities.repository.OfflineCinemaRepository
 import com.example.myapplication.database.entities.repository.OfflineOrderRepository
+import com.example.myapplication.database.entities.repository.OfflineOrderSessionRepository
 import com.example.myapplication.database.entities.repository.OrderRepository
 import com.example.myapplication.database.remotekeys.repository.OfflineRemoteKeyRepository
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +23,8 @@ import kotlinx.coroutines.flow.Flow
 class RestOrderRepository(
     private val service: MyServerService,
     private val dbOrderRepository: OfflineOrderRepository,
+    private val dbCinemaRepository: OfflineCinemaRepository,
+    private val dbOrderSessionRepository: OfflineOrderSessionRepository,
     private val dbRemoteKeyRepository: OfflineRemoteKeyRepository,
     private val database: AppDatabase
 ) : OrderRepository {
@@ -42,10 +49,24 @@ class RestOrderRepository(
         ).flow
     }
 
-    override suspend fun getOrder(uid: Int): List<SessionFromOrder> =
-        service.getOrder(uid).toListSessionsFromOrder()
+    override suspend fun getOrder(uid: Int): List<SessionFromOrder> {
+        val order = service.getOrder(uid)
+
+        dbOrderSessionRepository.deleteOrderSessions(uid)
+        order.sessions.map {
+            dbOrderSessionRepository.insertOrderSession(
+                OrderSessionCrossRef(
+                    uid,
+                    it.id,
+                    it.frozenPrice,
+                    it.count
+                )
+            )
+        }
+        return order.sessions.map { x -> x.toSessionFromOrder(dbCinemaRepository.getCinema(x.cinemaId).cinema.toCinemaRemote()) }
+    }
 
     override suspend fun insertOrder(order: Order): Long {
-        return service.createOrder(order.toOrderRemote()).toOrder().uid.toLong()
+        return dbOrderRepository.insertOrder(service.createOrder(order.toOrderRemote()).toOrder())
     }
 }

@@ -11,7 +11,6 @@ import com.example.myapplication.database.AppDatabase
 import com.example.myapplication.database.entities.model.Cinema
 import com.example.myapplication.database.entities.model.CinemaWithSessions
 import com.example.myapplication.database.entities.model.SessionFromCinema
-import com.example.myapplication.database.entities.model.toSession
 import com.example.myapplication.database.entities.repository.CinemaRepository
 import com.example.myapplication.database.entities.repository.OfflineCinemaRepository
 import com.example.myapplication.database.entities.repository.OfflineSessionRepository
@@ -49,12 +48,15 @@ class RestCinemaRepository(
 
     override suspend fun getCinema(uid: Int): CinemaWithSessions {
         val cinema = service.getCinema(uid).toCinema()
+
         val sessions = service.getSessionsForCinema(uid).map { x ->
             SessionFromCinema(
                 x.id,
                 x.dateTime,
                 x.price,
-                x.availableCount,
+                service.getSession(x.id).maxCount - service.getOrders().flatMap { order ->
+                    order.sessions.filter { session -> session.id == x.id }
+                }.sumOf { session -> session.count },
                 uid
             )
         }
@@ -70,6 +72,17 @@ class RestCinemaRepository(
     }
 
     override suspend fun deleteCinema(cinema: Cinema) {
-        service.deleteCinema(cinema.uid).toCinema()
+        val cart = service.getUsers()
+        cart.forEach { userRemote ->
+            userRemote.sessions = userRemote.sessions.filter { x -> x.cinemaId != cinema.uid }
+            service.updateUserCart(userRemote.id, userRemote)
+        }
+        val orders = service.getOrders()
+        orders.forEach { orderRemote ->
+            orderRemote.sessions = orderRemote.sessions.filter { x -> x.cinemaId != cinema.uid }
+            service.updateOrder(orderRemote.id, orderRemote)
+        }
+        service.deleteCinema(cinema.uid)
+        dbCinemaRepository.deleteCinema(cinema)
     }
 }

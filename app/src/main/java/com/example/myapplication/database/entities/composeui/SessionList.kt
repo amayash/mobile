@@ -33,17 +33,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.myapplication.R
 import com.example.myapplication.composeui.navigation.Screen
-import com.example.myapplication.database.entities.model.CinemaWithSessions
 import kotlinx.coroutines.launch
 import org.threeten.bp.format.DateTimeFormatter
 
 @Composable
 fun SessionList(
-    cinemaWithSessions: CinemaWithSessions,
+    cinemaWithSessionsViewModel: CinemaViewModel,
     navController: NavController,
     viewModel: SessionListViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val cinemaWithSessions = cinemaWithSessionsViewModel.cinemaUiState.cinemaWithSessions!!
+
     LazyColumn {
         if (cinemaWithSessions.sessions.isEmpty()) {
             item {
@@ -123,6 +124,7 @@ fun SessionList(
                                 onClick = {
                                     coroutineScope.launch {
                                         viewModel.deleteSession(session = session)
+                                        cinemaWithSessionsViewModel.refreshState()
                                     }
                                 },
                             ) {

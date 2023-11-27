@@ -4,21 +4,16 @@ import android.content.Context
 import com.example.myapplication.api.MyServerService
 import com.example.myapplication.api.cinema.RestCinemaRepository
 import com.example.myapplication.api.order.RestOrderRepository
+import com.example.myapplication.api.ordersession.RestOrderSessionRepository
 import com.example.myapplication.api.session.RestSessionRepository
 import com.example.myapplication.api.user.RestUserRepository
 import com.example.myapplication.api.usersession.RestUserSessionRepository
-import com.example.myapplication.database.entities.repository.CinemaRepository
 import com.example.myapplication.database.entities.repository.OfflineCinemaRepository
 import com.example.myapplication.database.entities.repository.OfflineOrderRepository
 import com.example.myapplication.database.entities.repository.OfflineOrderSessionRepository
 import com.example.myapplication.database.entities.repository.OfflineSessionRepository
 import com.example.myapplication.database.entities.repository.OfflineUserRepository
 import com.example.myapplication.database.entities.repository.OfflineUserSessionRepository
-import com.example.myapplication.database.entities.repository.OrderRepository
-import com.example.myapplication.database.entities.repository.OrderSessionRepository
-import com.example.myapplication.database.entities.repository.SessionRepository
-import com.example.myapplication.database.entities.repository.UserRepository
-import com.example.myapplication.database.entities.repository.UserSessionRepository
 import com.example.myapplication.database.remotekeys.repository.OfflineRemoteKeyRepository
 
 interface AppContainer {
@@ -26,7 +21,7 @@ interface AppContainer {
     val sessionRestRepository: RestSessionRepository
     val userRestRepository: RestUserRepository
     val orderRestRepository: RestOrderRepository
-    val orderSessionRepository: OrderSessionRepository
+    val orderSessionRestRepository: RestOrderSessionRepository
     val userSessionRestRepository: RestUserSessionRepository
 
     companion object {
@@ -42,7 +37,7 @@ class AppDataContainer(private val context: Context) : AppContainer {
     private val orderRepository: OfflineOrderRepository by lazy {
         OfflineOrderRepository(AppDatabase.getInstance(context).orderDao())
     }
-    override val orderSessionRepository: OrderSessionRepository by lazy {
+    private val orderSessionRepository: OfflineOrderSessionRepository by lazy {
         OfflineOrderSessionRepository(AppDatabase.getInstance(context).orderSessionCrossRefDao())
     }
     private val sessionRepository: OfflineSessionRepository by lazy {
@@ -70,19 +65,23 @@ class AppDataContainer(private val context: Context) : AppContainer {
         RestSessionRepository(
             MyServerService.getInstance(),
             sessionRepository,
+            userSessionRepository,
+            orderSessionRepository,
         )
     }
     override val userRestRepository: RestUserRepository by lazy {
         RestUserRepository(
             MyServerService.getInstance(),
             userRepository,
-            cinemaRepository,
+            userSessionRepository,
         )
     }
     override val orderRestRepository: RestOrderRepository by lazy {
         RestOrderRepository(
             MyServerService.getInstance(),
             orderRepository,
+            cinemaRepository,
+            orderSessionRepository,
             remoteKeyRepository,
             AppDatabase.getInstance(context)
         )
@@ -93,7 +92,10 @@ class AppDataContainer(private val context: Context) : AppContainer {
             userSessionRepository,
         )
     }
-    companion object {
-        const val TIMEOUT = 5000L
+    override val orderSessionRestRepository: RestOrderSessionRepository by lazy {
+        RestOrderSessionRepository(
+            MyServerService.getInstance(),
+            orderSessionRepository,
+        )
     }
 }

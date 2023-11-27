@@ -34,7 +34,7 @@ import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,6 +67,10 @@ fun Cart(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val cartUiState = viewModel.cartUiState
+
+    LaunchedEffect(Unit) {
+        viewModel.refreshState()
+    }
 
     Cart(
         cartUiState = cartUiState,
@@ -277,7 +281,11 @@ private fun SessionListItem(
 
                         IconButton(
                             onClick = {
-                                onChangeCount(session, 1, if (currentCount != session.availableCount) ++currentCount else currentCount)
+                                onChangeCount(
+                                    session,
+                                    1,
+                                    if (currentCount != session.availableCount) ++currentCount else currentCount
+                                )
                             }
                         ) {
                             Icon(

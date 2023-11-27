@@ -42,7 +42,7 @@ object AppViewModelProvider {
             CartViewModel(
                 cinemaApplication().container.userSessionRestRepository,
                 cinemaApplication().container.orderRestRepository,
-                cinemaApplication().container.orderSessionRepository,
+                cinemaApplication().container.orderSessionRestRepository,
                 cinemaApplication().container.userRestRepository,
             )
         }

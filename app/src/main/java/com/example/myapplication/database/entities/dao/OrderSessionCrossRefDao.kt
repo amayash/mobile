@@ -17,4 +17,10 @@ interface OrderSessionCrossRefDao {
 
     @Delete
     suspend fun delete(orderSessionCrossRef: OrderSessionCrossRef)
+
+    @Query("DELETE FROM orders_sessions where orders_sessions.order_id = :orderId")
+    suspend fun deleteByOrderUid(orderId: Int)
+
+    @Query("DELETE FROM orders_sessions where orders_sessions.session_id = :sessionId")
+    suspend fun deleteBySessionUid(sessionId: Int)
 }

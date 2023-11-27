@@ -19,8 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -39,6 +38,10 @@ fun CinemaView(
     viewModel: CinemaViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val cinemaUiState = viewModel.cinemaUiState
+
+    LaunchedEffect(Unit) {
+        viewModel.refreshState()
+    }
 
     Column(
         modifier = Modifier
@@ -131,7 +134,7 @@ fun CinemaView(
             }
         }
         if (cinemaUiState.cinemaWithSessions != null) {
-            SessionList(cinemaUiState.cinemaWithSessions!!, navController)
+            SessionList(viewModel, navController)
         }
     }
 }

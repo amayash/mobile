@@ -2,20 +2,19 @@ package com.example.myapplication.api.user
 
 import android.util.Log
 import com.example.myapplication.api.MyServerService
-import com.example.myapplication.api.cinema.toCinemaRemote
 import com.example.myapplication.api.session.toSessionFromCart
-import com.example.myapplication.api.session.toSessionFromCartRemote
 import com.example.myapplication.database.entities.model.SessionFromCart
 import com.example.myapplication.database.entities.model.User
-import com.example.myapplication.database.entities.repository.OfflineCinemaRepository
+import com.example.myapplication.database.entities.model.UserSessionCrossRef
 import com.example.myapplication.database.entities.repository.OfflineUserRepository
+import com.example.myapplication.database.entities.repository.OfflineUserSessionRepository
 import com.example.myapplication.database.entities.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 
 class RestUserRepository(
     private val service: MyServerService,
     private val dbUserRepository: OfflineUserRepository,
-    private val dbCinemaRepository: OfflineCinemaRepository,
+    private val dbUserSessionRepository: OfflineUserSessionRepository,
 ) : UserRepository {
     override fun getAllUsers(): Flow<List<User>> {
         Log.d(RestUserRepository::class.simpleName, "Get users")
@@ -24,23 +23,32 @@ class RestUserRepository(
 
     override suspend fun getCartByUser(userId: Int): List<SessionFromCart> {
         val cart = service.getUserCart(userId)
-        return cart.sessions.map { x -> x.toSessionFromCart(dbCinemaRepository.getCinema(x.cinemaId).cinema.toCinemaRemote()) }
+        dbUserSessionRepository.deleteUserSessions(userId)
+        cart.sessions.map { sessionFromCartRemote ->
+            dbUserSessionRepository.insertUserSession(
+                UserSessionCrossRef(
+                    userId,
+                    sessionFromCartRemote.id,
+                    sessionFromCartRemote.count
+                )
+            )
+        }
+
+        return cart.sessions.map {
+            it.toSessionFromCart(
+                service.getCinema(it.cinemaId),
+                service.getSession(it.id).maxCount - service.getOrders().flatMap { order ->
+                    order.sessions.filter { session -> session.id == it.id }
+                }.sumOf { session -> session.count })
+        }
     }
 
     override suspend fun insertUser(user: User) {
-        TODO("Not yet implemented")
     }
 
     override suspend fun updateUser(user: User) {
-        /*val currentCart = service.getUserCart(user.uid)
-        updateUserCart(user.uid,
-            currentCart.sessions.map { x ->
-                x.toSessionFromCart(dbCinemaRepository.getCinema(x.cinemaId).cinema.toCinemaRemote())
-            })*/
-        TODO("Not yet implemented")
     }
 
     override suspend fun deleteUser(user: User) {
-        TODO("Not yet implemented")
     }
 }

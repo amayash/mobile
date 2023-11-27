@@ -1,9 +1,9 @@
 package com.example.myapplication.api
 
 import com.example.myapplication.api.cinema.CinemaRemote
-import com.example.myapplication.api.session.SessionRemote
 import com.example.myapplication.api.order.OrderRemote
 import com.example.myapplication.api.session.SessionFromCinemaRemote
+import com.example.myapplication.api.session.SessionRemote
 import com.example.myapplication.api.user.UserRemote
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -22,17 +22,11 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MyServerService {
-    @GET("cinemas")
-    suspend fun getCinemas(): List<CinemaRemote>
-
-    @GET("sessions")
-    suspend fun getSessions(): List<SessionRemote>
-
     @GET("orders")
-    fun getOrders(): List<OrderRemote>
+    suspend fun getOrders(): List<OrderRemote>
 
     @GET("users")
-    fun getUsers(): List<UserRemote>
+    suspend fun getUsers(): List<UserRemote>
 
     @GET("cinemas")
     suspend fun getCinemas(
@@ -59,7 +53,7 @@ interface MyServerService {
     @DELETE("cinemas/{id}")
     suspend fun deleteCinema(
         @Path("id") id: Int,
-    ): CinemaRemote
+    )
 
     @GET("cinemas/{cinemaId}/sessions")
     suspend fun getSessionsForCinema(
@@ -114,6 +108,12 @@ interface MyServerService {
         @Body cinema: OrderRemote,
     ): OrderRemote
 
+    @PUT("orders/{id}")
+    suspend fun updateOrder(
+        @Path("id") id: Int,
+        @Body orderRemote: OrderRemote,
+    ): OrderRemote
+
     companion object {
         private const val BASE_URL = "http://192.168.0.101:8079/"
 
@@ -124,22 +124,16 @@ interface MyServerService {
             return INSTANCE ?: synchronized(this) {
                 val logger = HttpLoggingInterceptor()
                 logger.level = HttpLoggingInterceptor.Level.BASIC
-                val client = OkHttpClient.Builder()
-                    .addInterceptor(logger)
-                    .build()
+                val client = OkHttpClient.Builder().addInterceptor(logger).build()
                 val json = Json {
                     ignoreUnknownKeys = true
                     serializersModule = SerializersModule {
                         contextual(LocalDateTimeSerializer)
                     }
                 } // Создаем экземпляр Json с ignoreUnknownKeys = true
-                return Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .client(client)
+                return Retrofit.Builder().baseUrl(BASE_URL).client(client)
                     .addConverterFactory(json.asConverterFactory("application/json".toMediaType())) // Применяем конфигурацию Json
-                    .build()
-                    .create(MyServerService::class.java)
-                    .also { INSTANCE = it }
+                    .build().create(MyServerService::class.java).also { INSTANCE = it }
             }
         }
     }

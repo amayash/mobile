@@ -1,9 +1,7 @@
 package com.example.myapplication.database.entities.repository
 
 import com.example.myapplication.database.entities.dao.SessionDao
-import com.example.myapplication.database.entities.model.Cinema
 import com.example.myapplication.database.entities.model.Session
-import kotlinx.coroutines.flow.Flow
 
 class OfflineSessionRepository(private val sessionDao: SessionDao) : SessionRepository {
     override suspend fun getSession(uid: Int): Session = sessionDao.getByUid(uid)

@@ -13,4 +13,8 @@ class OfflineOrderSessionRepository(private val orderSessionDao: OrderSessionCro
 
     override suspend fun deleteOrderSession(orderSessionCrossRef: OrderSessionCrossRef) =
         orderSessionDao.delete(orderSessionCrossRef)
+
+    suspend fun deleteOrderSessions(userId: Int) = orderSessionDao.deleteByOrderUid(userId)
+
+    suspend fun deleteSessionsByUid(sessionId: Int) = orderSessionDao.deleteBySessionUid(sessionId)
 }
