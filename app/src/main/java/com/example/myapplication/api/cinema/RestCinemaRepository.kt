@@ -54,7 +54,7 @@ class RestCinemaRepository(
                 x.id,
                 x.dateTime,
                 x.price,
-                service.getSession(x.id).maxCount - service.getOrders().flatMap { order ->
+                x.maxCount - service.getOrders().flatMap { order ->
                     order.sessions.filter { session -> session.id == x.id }
                 }.sumOf { session -> session.count },
                 uid

@@ -21,8 +21,6 @@ class RestUserSessionRepository(
 
         val sessionFromCart = SessionFromCartRemote(
             session.uid,
-            session.dateTime,
-            session.price,
             userSessionCrossRef.count,
             session.cinemaId,
         )
@@ -37,7 +35,7 @@ class RestUserSessionRepository(
 
     override suspend fun updateUserSession(userSessionCrossRef: UserSessionCrossRef) {
         val userRemote = service.getUserCart(userSessionCrossRef.userId)
-        if (userSessionCrossRef.count == 0) {
+        if (userSessionCrossRef.count <= 0) {
             userRemote.sessions =
                 userRemote.sessions.filter { x -> x.id != userSessionCrossRef.sessionId }
         } else

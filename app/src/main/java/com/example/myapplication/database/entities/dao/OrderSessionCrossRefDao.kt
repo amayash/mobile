@@ -3,13 +3,14 @@ package com.example.myapplication.database.entities.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.myapplication.database.entities.model.OrderSessionCrossRef
 
 @Dao
 interface OrderSessionCrossRefDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(orderSessionCrossRef: OrderSessionCrossRef)
 
     @Update

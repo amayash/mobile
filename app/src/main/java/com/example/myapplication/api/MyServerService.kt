@@ -4,6 +4,7 @@ import com.example.myapplication.api.cinema.CinemaRemote
 import com.example.myapplication.api.order.OrderRemote
 import com.example.myapplication.api.session.SessionFromCinemaRemote
 import com.example.myapplication.api.session.SessionRemote
+import com.example.myapplication.api.session.SessionWithCinemaRemote
 import com.example.myapplication.api.user.UserRemote
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -60,10 +61,10 @@ interface MyServerService {
         @Path("cinemaId") cinemaId: Int
     ): List<SessionFromCinemaRemote>
 
-    @GET("sessions/{id}")
+    @GET("sessions/{id}?_expand=cinema")
     suspend fun getSession(
         @Path("id") id: Int,
-    ): SessionRemote
+    ): SessionWithCinemaRemote
 
     @POST("sessions")
     suspend fun createSession(
@@ -115,7 +116,7 @@ interface MyServerService {
     ): OrderRemote
 
     companion object {
-        private const val BASE_URL = "http://192.168.0.101:8079/"
+        private const val BASE_URL = "http://192.168.154.166:8079/"
 
         @Volatile
         private var INSTANCE: MyServerService? = null

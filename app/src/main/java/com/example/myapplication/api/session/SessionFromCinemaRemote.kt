@@ -12,6 +12,7 @@ class SessionFromCinemaRemote(
     @Contextual
     val dateTime: LocalDateTime = LocalDateTime.MIN,
     val price: Double = 0.0,
+    val maxCount: Int = 0,
     val availableCount: Int = 0,
     val cinemaId: Int = 0,
 )

@@ -10,13 +10,11 @@ import org.threeten.bp.LocalDateTime
 @Serializable
 class SessionFromCartRemote(
     val id: Int = 0,
-    @Contextual val dateTime: LocalDateTime = LocalDateTime.MIN,
-    val price: Double = 0.0,
     var count: Int = 0,
-    val cinemaId: Int = 0,
+    var cinemaId: Int = 0,
 )
 
-fun SessionFromCartRemote.toSessionFromCart(cinema: CinemaRemote, availableCount: Int): SessionFromCart =
+fun SessionFromCartRemote.toSessionFromCart(cinema: CinemaRemote, dateTime: LocalDateTime, price: Double, availableCount: Int): SessionFromCart =
     SessionFromCart(
-        id, dateTime, price, availableCount, count, cinemaId, cinema.toCinema()
+        id, dateTime, price, availableCount, count, cinema.id, cinema.toCinema()
     )

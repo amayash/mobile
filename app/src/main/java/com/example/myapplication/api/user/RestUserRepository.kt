@@ -35,9 +35,12 @@ class RestUserRepository(
         }
 
         return cart.sessions.map {
+            val session = service.getSession(it.id)
             it.toSessionFromCart(
-                service.getCinema(it.cinemaId),
-                service.getSession(it.id).maxCount - service.getOrders().flatMap { order ->
+                session.cinema,
+                session.dateTime,
+                session.price,
+                session.maxCount - service.getOrders().flatMap { order ->
                     order.sessions.filter { session -> session.id == it.id }
                 }.sumOf { session -> session.count })
         }

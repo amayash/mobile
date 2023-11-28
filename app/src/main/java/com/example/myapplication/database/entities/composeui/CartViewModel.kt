@@ -13,6 +13,7 @@ import com.example.myapplication.database.entities.repository.OrderRepository
 import com.example.myapplication.database.entities.repository.OrderSessionRepository
 import com.example.myapplication.database.entities.repository.UserRepository
 import com.example.myapplication.database.entities.repository.UserSessionRepository
+import kotlinx.coroutines.delay
 
 class CartViewModel(
     private val userSessionRepository: UserSessionRepository,
